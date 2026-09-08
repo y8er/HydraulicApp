@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Natural gas pipe hydraulics</title>
+<style>
+:root{--surface-1:#f4f3ef;--surface-2:#ffffff;--text-primary:#1a1a1a;--text-secondary:#5f5e5a;--text-muted:#888780;--text-warning:#854f0b;--bg-warning:#faeeda;--text-danger:#a32d2d;--bg-danger:#fcebeb;--border:#d3d1c7;--border-strong:#b4b2a9;--fill-primary:#1a1a1a;--on-primary:#ffffff;--radius:8px}
+@media (prefers-color-scheme:dark){:root{--surface-1:#2c2c2a;--surface-2:#1f1f1e;--text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;--text-warning:#fac775;--bg-warning:#412402;--text-danger:#f09595;--bg-danger:#501313;--border:#444441;--border-strong:#5f5e5a;--fill-primary:#f1efe8;--on-primary:#1a1a1a}}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--text-primary);background:var(--surface-1);margin:0 auto;padding:12px;max-width:480px;line-height:1.5}
+input,select,button{font:inherit;color:inherit;background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);height:36px;padding:0 10px}
+button{cursor:pointer}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lbl{display:block;font-size:13px;color:var(--text-secondary);margin:0 0 4px}
+.in{width:100%;box-sizing:border-box}
+.card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin:0 0 1rem}
+.mc{background:var(--surface-1);border-radius:var(--radius);padding:12px 14px}
+.mv{font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}
+.ml{font-size:13px;color:var(--text-secondary)}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:6px 0;border-bottom:0.5px solid var(--border);font-variant-numeric:tabular-nums}
+.stp{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:14px}
+.stp button{width:36px;height:36px;padding:0;font-size:18px}
+.mode{flex:1;height:40px;font-size:14px}
+.mode.on{background:var(--fill-primary);color:var(--on-primary);border-color:var(--fill-primary)}
+.warn{font-size:13px;color:var(--text-warning);background:var(--bg-warning);border-radius:var(--radius);padding:8px 10px;margin:10px 0 0}
+.err{font-size:13px;color:var(--text-danger);background:var(--bg-danger);border-radius:var(--radius);padding:8px 10px;margin:10px 0 0}
+.h{font-size:16px;font-weight:500;margin:0 0 10px}
+.note{font-size:12px;color:var(--text-muted);margin:10px 0 0;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div style="display:flex;gap:8px;margin:0 0 1rem">
+  <button class="mode on" id="mDp" type="button" onclick="setMode('dp')">Solve for pressure drop</button>
+  <button class="mode" id="mQ" type="button" onclick="setMode('q')">Solve for flow rate</button>
+</div>
+
+<div class="card">
+  <div class="g2">
+    <div class="mc"><div class="ml" id="r1l">Pressure drop</div><div class="mv" id="r1v">—</div></div>
+    <div class="mc"><div class="ml" id="r2l">Outlet pressure</div><div class="mv" id="r2v">—</div></div>
+  </div>
+  <div id="warns"></div>
+  <div style="margin-top:10px">
+    <div class="kv"><span>Inlet velocity</span><span id="v1">—</span></div>
+    <div class="kv"><span>Outlet velocity</span><span id="v2">—</span></div>
+    <div class="kv"><span>API RP 14E velocity, C=100 (screening)</span><span id="ve">—</span></div>
+    <div class="kv"><span>Outlet Mach (isothermal, real gas)</span><span id="ma">—</span></div>
+    <div class="kv"><span>Choked capacity at this inlet</span><span id="qmax">—</span></div>
+    <div class="kv"><span>Reynolds number (inlet)</span><span id="re">—</span></div>
+    <div class="kv"><span>Darcy friction factor (inlet)</span><span id="ff">—</span></div>
+    <div class="kv"><span>Fittings K total</span><span id="kk">—</span></div>
+    <div class="kv"><span>Z (inlet / outlet)</span><span id="zz">—</span></div>
+    <div class="kv"><span>Viscosity (inlet)</span><span id="mu">—</span></div>
+    <div class="kv"><span>Inlet density</span><span id="rho">—</span></div>
+    <div class="kv"><span>Mass flow</span><span id="mdot">—</span></div>
+    <div class="kv"><span>Inlet actual flow</span><span id="acfm">—</span></div>
+    <div class="kv" style="border-bottom:none"><span>Pipe + extra length</span><span id="ltot">—</span></div>
+  </div>
+  <p class="note">Isothermal momentum equation integrated along the pipe with local Z, density, viscosity, and friction factor; choke = local isothermal Mach 1 (real-gas dP/dρ). Fittings K distributed along the length. Sweet gas from SG (Standing pseudocriticals, DAK Z, LGE viscosity), SCF at 60 °F, horizontal pipe, constant line temperature. Screening tool.</p>
+</div>
+
+<div class="card">
+  <p class="h">Gas and conditions</p>
+  <div class="g2">
+    <div id="qRow"><label class="lbl" for="q">Gas rate (MMSCFD)</label><input class="in" id="q" type="number" inputmode="decimal" step="0.1" value="10" oninput="calc()"></div>
+    <div><label class="lbl" for="sg">Specific gravity (air=1)</label><input class="in" id="sg" type="number" inputmode="decimal" step="0.01" value="0.60" oninput="calc()"></div>
+    <div><label class="lbl" for="t1">Line temperature (°F, constant)</label><input class="in" id="t1" type="number" inputmode="decimal" step="1" value="80" oninput="calc()"></div>
+    <div><label class="lbl" for="p1">Inlet pressure (psig)</label><input class="in" id="p1" type="number" inputmode="decimal" step="1" value="500" oninput="calc()"></div>
+    <div id="p2Row"><label class="lbl" for="p2">Outlet pressure (psig)</label><input class="in" id="p2" type="number" inputmode="decimal" step="1" value="480" oninput="calc()"></div>
+  </div>
+</div>
+
+<div class="card">
+  <p class="h">Pipe</p>
+  <div class="g2">
+    <div><label class="lbl" for="nps">Nominal size</label><select class="in" id="nps" onchange="pickSize()">
+      <option value="0.824,0.742,0.824,0.742,0.025">3/4 in</option>
+      <option value="1.049,0.957,1.049,0.957,0.023">1 in</option>
+      <option value="1.610,1.500,1.610,1.500,0.021">1-1/2 in</option>
+      <option value="2.067,1.939,2.067,1.939,0.019">2 in</option>
+      <option value="3.068,2.900,3.068,2.900,0.018">3 in</option>
+      <option value="4.026,3.826,4.026,3.826,0.017" selected>4 in</option>
+      <option value="6.065,5.761,6.065,5.761,0.015">6 in</option>
+      <option value="7.981,7.625,7.981,7.625,0.014">8 in</option>
+      <option value="10.020,9.562,10.020,9.750,0.014">10 in</option>
+      <option value="11.938,11.374,12.000,11.750,0.013">12 in</option>
+      <option value="15.000,14.314,15.250,15.000,0.013">16 in</option>
+    </select></div>
+    <div><label class="lbl" for="sch">Wall</label><select class="in" id="sch" onchange="pickSize()"><option value="0">Schedule 40</option><option value="1">Schedule 80</option><option value="2">STD</option><option value="3">XS</option></select></div>
+    <div><label class="lbl" for="id">Inside diameter (in)</label><input class="in" id="id" type="number" inputmode="decimal" step="0.001" value="4.026" oninput="calc()"></div>
+    <div><label class="lbl" for="len">Length (ft)</label><input class="in" id="len" type="number" inputmode="decimal" step="1" value="1000" oninput="calc()"></div>
+    <div><label class="lbl" for="rough">Roughness (in)</label><input class="in" id="rough" type="number" inputmode="decimal" step="0.0001" value="0.0018" oninput="calc()"></div>
+    <div><label class="lbl" for="lex">Extra equivalent length (ft)</label><input class="in" id="lex" type="number" inputmode="decimal" step="1" value="0" oninput="calc()"></div>
+  </div>
+</div>
+
+<div class="card">
+  <p class="h">Fittings, K = (L/D)·fT (Crane TP-410)</p>
+  <div id="fits"></div>
+  <div class="g2" style="margin-top:10px">
+    <div><label class="lbl" for="ft">fT, Crane table (editable)</label><input class="in" id="ft" type="number" inputmode="decimal" step="0.001" value="0.017" oninput="calc()"></div>
+    <div style="font-size:13px;color:var(--text-secondary);align-self:end;padding-bottom:6px">Σ L/D: <span id="sld">0</span><br>K total: <span id="kfit">0</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <p class="h">Base and ambient</p>
+  <div class="g2">
+    <div><label class="lbl" for="patm">Atmospheric pressure (psia)</label><input class="in" id="patm" type="number" inputmode="decimal" step="0.01" value="14.7" oninput="calc()"></div>
+    <div><label class="lbl" for="pb">SCF base pressure (psia) at 60 °F</label><select class="in" id="pb" onchange="calc()"><option value="14.696">14.696</option><option value="14.73">14.73</option></select></div>
+  </div>
+</div>
+
+<script>
+var R=8.314462,NG=3000;
+var FIT=[["90° LR elbow",14],["90° std elbow",30],["45° elbow",16],["Tee, run",20],["Tee, branch",60],["Ball valve (full bore)",3],["Gate valve",8],["Plug valve",18],["Butterfly valve",45],["Globe valve",340],["Swing check",100]];
+var cnt=FIT.map(function(){return 0;});
+var mode='dp';
+function $(i){return document.getElementById(i);}
+function num(i){return parseFloat($(i).value);}
+function fmt(x,d){if(!isFinite(x))return '—';return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
+function dak(ppr,tpr){var A=[0.3265,-1.07,-0.5339,0.01569,-0.05165,0.5475,-0.7361,0.1844,0.1056,0.6134,0.721];var z=1;for(var i=0;i<400;i++){var r=0.27*ppr/(z*tpr);var c1=A[0]+A[1]/tpr+A[2]/Math.pow(tpr,3)+A[3]/Math.pow(tpr,4)+A[4]/Math.pow(tpr,5);var c2=A[5]+A[6]/tpr+A[7]/(tpr*tpr);var c3=A[8]*(A[6]/tpr+A[7]/(tpr*tpr));var zn=1+c1*r+c2*r*r-c3*Math.pow(r,5)+A[9]*(1+A[10]*r*r)*(r*r/Math.pow(tpr,3))*Math.exp(-A[10]*r*r);var zw=0.5*z+0.5*zn;if(!isFinite(zw))return NaN;if(Math.abs(zw-z)<1e-11)return (zw>0.2&&zw<3)?zw:NaN;z=zw;}return NaN;}
+function zf(P,T,sg){var tpc=168+325*sg-12.5*sg*sg,ppc=677+15*sg-37.5*sg*sg;return dak((P/6894.757)/ppc,(T*1.8)/tpc);}
+function visc(T,M,rho){var Tr=T*1.8;var K=(9.379+0.01607*M)*Math.pow(Tr,1.5)/(209.2+19.26*M+Tr);var X=3.448+986.4/Tr+0.01009*M;var Y=2.447-0.2224*X;return K*1e-4*Math.exp(X*Math.pow(rho/1000,Y))*1e-3;}
+function fric(Re,rr){if(Re<2300)return 64/Math.max(Re,1);var f=0.25/Math.pow(Math.log10(rr/3.7+5.74/Math.pow(Re,0.9)),2);for(var i=0;i<200;i++){var fn=1/Math.pow(-2*Math.log10(rr/3.7+2.51/(Re*Math.sqrt(f))),2);if(!isFinite(fn))return NaN;if(Math.abs(fn-f)<1e-12)return fn;f=fn;}return NaN;}
+function buildTable(P1,T,sg){
+  var M=28.9647*sg,Mk=M/1000,N=NG,dp=P1/N,p=new Array(N),Z=new Array(N),rho=new Array(N),mu=new Array(N),ct2=new Array(N),k;
+  for(k=0;k<N;k++){p[k]=P1-k*dp;Z[k]=zf(p[k],T,sg);if(!isFinite(Z[k]))return null;}
+  for(k=0;k<N;k++){
+    var dZ=k===0?(Z[0]-Z[1])/dp:(k===N-1?(Z[N-2]-Z[N-1])/dp:(Z[k-1]-Z[k+1])/(2*dp));
+    var den=Z[k]-p[k]*dZ;if(!(den>0))return null;
+    rho[k]=p[k]*Mk/(Z[k]*R*T);ct2[k]=(R*T/Mk)*Z[k]*Z[k]/den;mu[k]=visc(T,M,rho[k]);
+  }
+  return{n:N,dp:dp,p:p,Z:Z,rho:rho,mu:mu,ct2:ct2,P1:P1};
+}
+function at(tb,key,P){var x=(tb.P1-P)/tb.dp;var k=Math.floor(x);if(k<0)k=0;if(k>tb.n-2)k=tb.n-2;var u=x-k;return tb[key][k]*(1-u)+tb[key][k+1]*u;}
+function walk(G,tb,D,rr,KL,L){
+  var X=0,pI=0,pM=0,N=tb.n,k;
+  for(k=0;k<N;k++){
+    var m2=G*G/(tb.rho[k]*tb.rho[k]*tb.ct2[k]);
+    if(m2>=1){if(k===0)return{st:'over',Lstar:0};var t=(1-pM)/(m2-pM);return{st:'choked',Lstar:X+pI*t*tb.dp/2,Pstar:tb.p[k-1]-t*tb.dp};}
+    var f=fric(G*D/tb.mu[k],rr);if(!isFinite(f))return{st:'err'};
+    var I=(1-m2)*2*tb.rho[k]/((f/D+KL)*G*G);
+    if(k>0){var Xn=X+(pI+I)*tb.dp/2;if(Xn>=L){var u=(L-X)/(Xn-X);return{st:'sub',P2:tb.p[k-1]-u*tb.dp};}X=Xn;}
+    pI=I;pM=m2;
+  }
+  return{st:'floor'};
+}
+function capacity(tb,D,rr,KL,L){
+  var hi=tb.rho[0]*Math.sqrt(tb.ct2[0]),lo=0,w,i,ok=false;
+  for(i=0;i<120;i++){var m=0.5*(lo+hi);w=walk(m,tb,D,rr,KL,L);if(w.st==='err')return null;
+    if(w.st==='over'||(w.st==='choked'&&w.Lstar<L))hi=m;else lo=m;if(hi-lo<1e-11*hi){ok=true;break;}}
+  if(!ok)return null;
+  var G=0.5*(lo+hi);w=walk(G,tb,D,rr,KL,L);
+  var Ps=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);if(!isFinite(Ps))return null;
+  return{G:G,Pstar:Ps};
+}
+function solve(o){
+  var M=28.9647*o.sg,Mk=M/1000,T=(o.t1+459.67)/1.8,Tstd=288.7056,Pstd=o.pb*6894.757;
+  var zstd=zf(Pstd,Tstd,o.sg);if(!isFinite(zstd))return{err:'Z-factor did not converge at base conditions.'};
+  var rhostd=Pstd*Mk/(zstd*R*Tstd);
+  var D=o.id*0.0254,A=Math.PI*D*D/4,L=(o.len+o.lex)*0.3048,rr=o.rough*0.0254/D,K=o.ld*o.ft,KL=K/L;
+  var P1=(o.p1+o.patm)*6894.757;
+  var tb=buildTable(P1,T,o.sg);if(!tb)return{err:'Gas property model failed; check temperature, pressure, and SG.'};
+  var cap=capacity(tb,D,rr,KL,L);if(!cap)return{err:'Capacity solver did not converge.'};
+  var toQ=function(g){return g*A/rhostd*86400/0.0283168/1e6;};
+  var G,P2,choked=false,w;
+  if(o.mode==='dp'){
+    G=o.q*1e6*0.0283168/86400*rhostd/A;
+    if(G>cap.G*(1+1e-8))return{cap:true,qmax:toQ(cap.G),pcap:cap.Pstar/6894.757-o.patm};
+    w=walk(G,tb,D,rr,KL,L);
+    if(w.st==='sub')P2=w.P2;else if(w.st==='choked')P2=w.Pstar;else return{err:'Outlet pressure not resolved; reduce length or raise inlet pressure.'};
+    choked=G>=cap.G*(1-1e-6);
+  }else{
+    var P2s=(o.p2+o.patm)*6894.757;
+    if(!(P2s<P1))return{err:'Outlet pressure must be below inlet pressure.'};
+    if(P2s<=cap.Pstar){choked=true;G=cap.G;P2=cap.Pstar;}
+    else{var lo=0,hi=cap.G,ok=false;
+      for(var i=0;i<120;i++){var m=0.5*(lo+hi);w=walk(m,tb,D,rr,KL,L);var pm=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);
+        if(!isFinite(pm))return{err:'Flow solver failed.'};
+        if(pm>P2s)lo=m;else hi=m;if(hi-lo<1e-11*hi){ok=true;break;}}
+      if(!ok)return{err:'Flow solver did not converge.'};
+      G=0.5*(lo+hi);w=walk(G,tb,D,rr,KL,L);P2=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);if(!isFinite(P2))return{err:'Flow solver failed.'};}
+  }
+  if(!(G>0)||!(P2>0))return{err:'Solver returned invalid values.'};
+  var z1=tb.Z[0],z2=at(tb,'Z',P2),rho1=tb.rho[0],rho2=at(tb,'rho',P2),c2=Math.sqrt(at(tb,'ct2',P2));
+  var v1=G/rho1,v2=G/rho2,mdot=G*A,Re1=G*D/tb.mu[0],f1=fric(Re1,rr);
+  return{choked:choked,P1:P1,P2:P2,dp:(P1-P2)/6894.757,p2g:P2/6894.757-o.patm,q:toQ(G),qmax:toQ(cap.G),pcap:cap.Pstar/6894.757-o.patm,
+    v1:v1*3.28084,v2:v2*3.28084,ve:100/Math.sqrt(rho2*0.062428),ma:v2/c2,
+    Re:Re1,f:f1,K:K,z1:z1,z2:z2,mu:tb.mu[0]*1000,rho1:rho1*0.062428,mdot:mdot*2.20462*3600,acfm:mdot/rho1*2118.88,ltot:o.len+o.lex};
+}
+function calc(){
+  var ld=0;for(var i=0;i<FIT.length;i++)ld+=cnt[i]*FIT[i][1];
+  var o={mode:mode,q:num('q'),sg:num('sg'),t1:num('t1'),p1:num('p1'),p2:num('p2'),id:num('id'),len:num('len'),rough:num('rough'),lex:num('lex'),ft:num('ft'),patm:num('patm'),pb:parseFloat($('pb').value),ld:ld};
+  $('sld').textContent=fmt(ld,0);$('kfit').textContent=fmt(ld*o.ft,2);
+  var e=[];
+  if(!(o.sg>0))e.push('Specific gravity must be positive.');
+  if(!(o.t1>-459.67))e.push('Temperature must be above −459.67 °F.');
+  if(!(o.patm>0))e.push('Atmospheric pressure must be positive.');
+  if(!(o.id>0))e.push('Inside diameter must be positive.');
+  if(!(o.len>0))e.push('Length must be positive.');
+  if(!(o.rough>=0))e.push('Roughness must be 0 or more.');
+  if(!(o.lex>=0))e.push('Extra equivalent length must be 0 or more.');
+  if(!(o.ft>=0))e.push('fT must be 0 or more.');
+  if(!(o.p1+o.patm>0))e.push('Inlet absolute pressure must be positive.');
+  if(mode==='dp'&&!(o.q>0))e.push('Gas rate must be positive.');
+  if(mode==='q'&&!(o.p2+o.patm>0))e.push('Outlet absolute pressure must be positive.');
+  if(e.length){show(null,e,true);return;}
+  var w=[];
+  if(o.sg<0.55||o.sg>1.0)w.push('Specific gravity outside 0.55–1.0; Standing pseudocritical correlation loses accuracy.');
+  var r=solve(o);
+  if(r.err){show(null,[r.err],true);return;}
+  if(r.cap){show(null,['Rate exceeds the choked capacity of this line at the inlet pressure: '+fmt(r.qmax,2)+' MMSCFD at '+fmt(r.pcap,1)+' psig exit. Reduce rate, shorten length, or increase diameter.'],true);return;}
+  if(r.choked)w.push('Flow is choked: isothermal Mach 1 at the outlet. The exit pressure shown is the choke pressure; lowering downstream pressure further does not increase flow.');
+  else if(r.ma>0.3)w.push('Outlet isothermal Mach above 0.3; isothermal model accuracy degrades.');
+  if(r.v2>r.ve)w.push('Outlet velocity exceeds the API RP 14E C=100 value. Screening only; erosion risk depends on solids and service.');
+  else if(r.v2>60)w.push('Outlet velocity above 60 ft/s. Screening flag for noise and vibration; verify for the service.');
+  if(r.Re<4000)w.push('Laminar or transitional flow at the inlet (Re below 4000).');
+  if(!r.choked&&(r.P1-r.P2)/r.P1>0.4)w.push('ΔP above 40% of inlet absolute pressure; consider segmenting the line.');
+  show(r,w,false);
+}
+function show(r,w,isErr){
+  var ch=r&&r.choked;
+  if(mode==='dp'){$('r1l').textContent='Pressure drop';$('r2l').textContent=ch?'Outlet pressure (choked)':'Outlet pressure';
+    $('r1v').textContent=r?fmt(r.dp,r.dp<10?2:1)+' psi':'—';$('r2v').textContent=r?fmt(r.p2g,1)+' psig':'—';}
+  else{$('r1l').textContent=ch?'Flow rate (choked)':'Flow rate';$('r2l').textContent=ch?'Exit pressure (choked)':'Pressure drop';
+    $('r1v').textContent=r?fmt(r.q,r.q<1?3:2)+' MMSCFD':'—';$('r2v').textContent=r?(ch?fmt(r.p2g,1)+' psig':fmt(r.dp,r.dp<10?2:1)+' psi'):'—';}
+  var ids=['v1','v2','ve','ma','qmax','re','ff','kk','zz','mu','rho','mdot','acfm','ltot'];
+  if(!r){for(var k=0;k<ids.length;k++)$(ids[k]).textContent='—';}
+  else{$('v1').textContent=fmt(r.v1,1)+' ft/s';$('v2').textContent=fmt(r.v2,1)+' ft/s';$('ve').textContent=fmt(r.ve,1)+' ft/s';
+    $('ma').textContent=fmt(r.ma,3);$('qmax').textContent=fmt(r.qmax,2)+' MMSCFD at '+fmt(r.pcap,1)+' psig';
+    $('re').textContent=fmt(r.Re,0);$('ff').textContent=fmt(r.f,4);$('kk').textContent=fmt(r.K,2);$('zz').textContent=fmt(r.z1,4)+' / '+fmt(r.z2,4);$('mu').textContent=fmt(r.mu,4)+' cP';
+    $('rho').textContent=fmt(r.rho1,3)+' lb/ft³';$('mdot').textContent=fmt(r.mdot,0)+' lb/hr';$('acfm').textContent=fmt(r.acfm,1)+' ACFM';$('ltot').textContent=fmt(r.ltot,0)+' ft';}
+  var h='';for(var j=0;j<w.length;j++)h+='<div class="'+(isErr?'err':'warn')+'">'+w[j]+'</div>';$('warns').innerHTML=h;
+}
+function setMode(m){mode=m;$('mDp').className='mode'+(m==='dp'?' on':'');$('mQ').className='mode'+(m==='q'?' on':'');
+  $('qRow').style.display=m==='dp'?'':'none';$('p2Row').style.display=m==='q'?'':'none';calc();}
+function pickSize(){var v=$('nps').value.split(',');$('id').value=v[parseInt($('sch').value,10)];$('ft').value=v[4];calc();}
+function step(i,d){cnt[i]=Math.max(0,cnt[i]+d);$('c'+i).textContent=cnt[i];calc();}
+(function(){var h='';for(var i=0;i<FIT.length;i++){h+='<div class="stp"><span>'+FIT[i][0]+' <span style="color:var(--text-muted);font-size:12px">L/D '+FIT[i][1]+'</span></span><span style="display:flex;align-items:center;gap:10px"><button type="button" aria-label="Remove one" onclick="step('+i+',-1)">−</button><span id="c'+i+'" style="min-width:18px;text-align:center;font-variant-numeric:tabular-nums">0</span><button type="button" aria-label="Add one" onclick="step('+i+',1)">+</button></span></div>';}
+  $('fits').innerHTML=h;setMode('dp');})();
+</script>
+</body>
+</html>
