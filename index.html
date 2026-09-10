@@ -7,17 +7,20 @@
 <style>
 :root{--surface-1:#f4f3ef;--surface-2:#ffffff;--text-primary:#1a1a1a;--text-secondary:#5f5e5a;--text-muted:#888780;--text-warning:#854f0b;--bg-warning:#faeeda;--text-danger:#a32d2d;--bg-danger:#fcebeb;--border:#d3d1c7;--border-strong:#b4b2a9;--fill-primary:#1a1a1a;--on-primary:#ffffff;--radius:8px}
 @media (prefers-color-scheme:dark){:root{--surface-1:#2c2c2a;--surface-2:#1f1f1e;--text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;--text-warning:#fac775;--bg-warning:#412402;--text-danger:#f09595;--bg-danger:#501313;--border:#444441;--border-strong:#5f5e5a;--fill-primary:#f1efe8;--on-primary:#1a1a1a}}
-body{font-family:system-ui,-apple-system,sans-serif;color:var(--text-primary);background:var(--surface-1);margin:0 auto;padding:12px;max-width:480px;line-height:1.5}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--text-primary);background:var(--surface-1);margin:0 auto;padding:12px;max-width:720px;line-height:1.5}
 input,select,button{font:inherit;color:inherit;background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);height:36px;padding:0 10px}
 button{cursor:pointer}
+select:disabled{opacity:0.5}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .lbl{display:block;font-size:13px;color:var(--text-secondary);margin:0 0 4px}
 .in{width:100%;box-sizing:border-box}
 .card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin:0 0 1rem}
+.seg{border:0.5px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin:0 0 10px;background:var(--surface-1)}
 .mc{background:var(--surface-1);border-radius:var(--radius);padding:12px 14px}
-.mv{font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}
+.mv{font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
 .ml{font-size:13px;color:var(--text-secondary)}
-.kv{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:6px 0;border-bottom:0.5px solid var(--border);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:5px 0;border-bottom:0.5px solid var(--border);font-variant-numeric:tabular-nums}
+.kv span:last-child{text-align:right}
 .stp{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:14px}
 .stp button{width:36px;height:36px;padding:0;font-size:18px}
 .mode{flex:1;height:40px;font-size:14px}
@@ -25,11 +28,33 @@ button{cursor:pointer}
 .warn{font-size:13px;color:var(--text-warning);background:var(--bg-warning);border-radius:var(--radius);padding:8px 10px;margin:10px 0 0}
 .err{font-size:13px;color:var(--text-danger);background:var(--bg-danger);border-radius:var(--radius);padding:8px 10px;margin:10px 0 0}
 .h{font-size:16px;font-weight:500;margin:0 0 10px}
+.sh{font-size:14px;font-weight:500;margin:10px 0 4px}
+.tr{font-size:13px;color:var(--text-secondary);margin:8px 0 2px;font-style:italic}
 .note{font-size:12px;color:var(--text-muted);margin:10px 0 0;line-height:1.5}
+.rep{background:#fff;color:#111;border:1px solid #bbb;padding:18px 22px;margin:0 0 1rem;font-size:12px;line-height:1.35;font-family:Arial,Helvetica,sans-serif}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:8px}
+.rtitle{font-size:20px;font-weight:700}
+.rsub{font-size:11px;color:#555}
+.rmeta{text-align:right;font-size:11px;color:#333}
+.rbar{display:flex;justify-content:space-between;font-weight:700;font-size:13px;margin:6px 0}
+.rbox{border:1px solid #888;padding:8px 10px;margin:6px 0 10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
+.rh{font-weight:700;font-size:11px;letter-spacing:.04em;margin:8px 0 4px}
+.rl{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}
+.rl span:last-child{white-space:nowrap}
+.rt{width:100%;border-collapse:collapse;font-size:10.5px;margin:4px 0 8px}
+.rt th,.rt td{border:1px solid #999;padding:3px 5px;text-align:right}
+.rt th:first-child,.rt td:first-child{text-align:left}
+.rt th{background:#eee;font-weight:600}
+.rw{font-size:11px;margin:2px 0 2px 14px}
+.rsig{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0 4px;font-size:11px}
+.rsig div{border-top:1px solid #333;padding-top:3px}
+.rfoot{border-top:1px solid #999;margin-top:10px;padding-top:4px;font-size:10px;color:#555;display:flex;justify-content:space-between}
+@media print{body{background:#fff;max-width:none;padding:0}#app{display:none}.rep{border:none;padding:0}.rt,svg,.rbox,.rsig{page-break-inside:avoid}.rh{page-break-after:avoid}@page{size:letter portrait;margin:0.6in}}
 </style>
 </head>
 <body>
 
+<div id="app">
 <div style="display:flex;gap:8px;margin:0 0 1rem">
   <button class="mode on" id="mDp" type="button" onclick="setMode('dp')">Solve for pressure drop</button>
   <button class="mode" id="mQ" type="button" onclick="setMode('q')">Solve for flow rate</button>
@@ -42,22 +67,33 @@ button{cursor:pointer}
   </div>
   <div id="warns"></div>
   <div style="margin-top:10px">
-    <div class="kv"><span>Inlet velocity</span><span id="v1">—</span></div>
-    <div class="kv"><span>Outlet velocity</span><span id="v2">—</span></div>
-    <div class="kv"><span>API RP 14E velocity, C=100 (screening)</span><span id="ve">—</span></div>
-    <div class="kv"><span>Outlet Mach (isothermal, real gas)</span><span id="ma">—</span></div>
-    <div class="kv"><span>Choked capacity at this inlet</span><span id="qmax">—</span></div>
-    <div class="kv"><span>Reynolds number (inlet)</span><span id="re">—</span></div>
-    <div class="kv"><span>Darcy friction factor (inlet)</span><span id="ff">—</span></div>
-    <div class="kv"><span>Fittings K total</span><span id="kk">—</span></div>
+    <div class="kv"><span>Assembly inlet velocity</span><span id="v1">—</span></div>
+    <div class="kv"><span>Assembly outlet velocity</span><span id="v2">—</span></div>
+    <div class="kv"><span>API RP 14E velocity at outlet, C=100 (screening)</span><span id="ve">—</span></div>
+    <div class="kv"><span>Assembly outlet Mach (isothermal, real gas)</span><span id="ma">—</span></div>
+    <div class="kv"><span>Maximum Mach in resolved segments</span><span id="mam">—</span></div>
+    <div class="kv"><span>Capacity (isothermal estimate)</span><span id="qmax">—</span></div>
     <div class="kv"><span>Z (inlet / outlet)</span><span id="zz">—</span></div>
+    <div class="kv"><span>Tpr / Ppr at inlet</span><span id="pr">—</span></div>
     <div class="kv"><span>Viscosity (inlet)</span><span id="mu">—</span></div>
     <div class="kv"><span>Inlet density</span><span id="rho">—</span></div>
     <div class="kv"><span>Mass flow</span><span id="mdot">—</span></div>
     <div class="kv"><span>Inlet actual flow</span><span id="acfm">—</span></div>
-    <div class="kv" style="border-bottom:none"><span>Pipe + extra length</span><span id="ltot">—</span></div>
+    <div class="kv"><span>Total length incl. extra equivalent</span><span id="ltot">—</span></div>
+    <div class="kv" style="border-bottom:none"><span>Grid self-check (independent half grid)</span><span id="gc">—</span></div>
   </div>
-  <p class="note">Isothermal momentum equation integrated along the pipe with local Z, density, viscosity, and friction factor; choke = local isothermal Mach 1 (real-gas dP/dρ). Fittings K distributed along the length. Sweet gas from SG (Standing pseudocriticals, DAK Z, LGE viscosity), SCF at 60 °F, horizontal pipe, constant line temperature. Screening tool.</p>
+  <div id="segres"></div>
+  <p class="note" id="mnote">Segments in series at constant mass flow. Within a segment: isothermal momentum equation integrated with local Z, density, viscosity, and friction factor (64/Re below Re 2,000, Colebrook above 4,000, linear blend between); choke = local isothermal Mach 1 (real-gas dP/dρ). Between segments of different ID: isothermal real-gas Bernoulli across the junction plus a loss K on the small-bore velocity (Crane sudden-change K by default); the contraction root is bracketed above the residual minimum at Mach 1/√(1+K); "no solution" at a transition is a model limit, not a confirmed choke. Capacity by bisection on mass flow, controlling location from the limiting event on the infeasible side. Flow mode reports a limit only when the bracket closes against a verified event and the outlet-pressure residual is checked; otherwise "not resolved". The operating point is solved independently of capacity. A limit before the final segment is internal; downstream segments are then not resolved. Corrugated hose: multiplier on steel-pipe friction at the same ID (Penflex EB-111 basis). Sweet gas from SG (Standing, DAK, LGE), SCF at 60 °F, horizontal. Screening tool.</p>
+</div>
+
+<div class="card">
+  <p class="h">Job</p>
+  <div class="g2">
+    <div><label class="lbl" for="job">Job number</label><input class="in" id="job" type="text" placeholder="e.g. 26-0142"></div>
+    <div><label class="lbl" for="case">Case</label><input class="in" id="case" type="text" placeholder="e.g. Fleet 202 fuel gas, max rate"></div>
+    <div><label class="lbl" for="prep">Prepared by</label><input class="in" id="prep" type="text" placeholder="Name"></div>
+    <div><label class="lbl" for="chk">Checked by</label><input class="in" id="chk" type="text" placeholder="Name"></div>
+  </div>
 </div>
 
 <div class="card">
@@ -72,36 +108,17 @@ button{cursor:pointer}
 </div>
 
 <div class="card">
-  <p class="h">Pipe</p>
-  <div class="g2">
-    <div><label class="lbl" for="nps">Nominal size</label><select class="in" id="nps" onchange="pickSize()">
-      <option value="0.824,0.742,0.824,0.742,0.025">3/4 in</option>
-      <option value="1.049,0.957,1.049,0.957,0.023">1 in</option>
-      <option value="1.610,1.500,1.610,1.500,0.021">1-1/2 in</option>
-      <option value="2.067,1.939,2.067,1.939,0.019">2 in</option>
-      <option value="3.068,2.900,3.068,2.900,0.018">3 in</option>
-      <option value="4.026,3.826,4.026,3.826,0.017" selected>4 in</option>
-      <option value="6.065,5.761,6.065,5.761,0.015">6 in</option>
-      <option value="7.981,7.625,7.981,7.625,0.014">8 in</option>
-      <option value="10.020,9.562,10.020,9.750,0.014">10 in</option>
-      <option value="11.938,11.374,12.000,11.750,0.013">12 in</option>
-      <option value="15.000,14.314,15.250,15.000,0.013">16 in</option>
-    </select></div>
-    <div><label class="lbl" for="sch">Wall</label><select class="in" id="sch" onchange="pickSize()"><option value="0">Schedule 40</option><option value="1">Schedule 80</option><option value="2">STD</option><option value="3">XS</option></select></div>
-    <div><label class="lbl" for="id">Inside diameter (in)</label><input class="in" id="id" type="number" inputmode="decimal" step="0.001" value="4.026" oninput="calc()"></div>
-    <div><label class="lbl" for="len">Length (ft)</label><input class="in" id="len" type="number" inputmode="decimal" step="1" value="1000" oninput="calc()"></div>
-    <div><label class="lbl" for="rough">Roughness (in)</label><input class="in" id="rough" type="number" inputmode="decimal" step="0.0001" value="0.0018" oninput="calc()"></div>
-    <div><label class="lbl" for="lex">Extra equivalent length (ft)</label><input class="in" id="lex" type="number" inputmode="decimal" step="1" value="0" oninput="calc()"></div>
-  </div>
+  <p class="h">Segments (in flow order)</p>
+  <div id="segs"></div>
+  <button type="button" onclick="addSeg()" style="width:100%;height:40px">+ Add segment</button>
 </div>
 
 <div class="card">
   <p class="h">Fittings, K = (L/D)·fT (Crane TP-410)</p>
-  <div id="fits"></div>
-  <div class="g2" style="margin-top:10px">
-    <div><label class="lbl" for="ft">fT, Crane table (editable)</label><input class="in" id="ft" type="number" inputmode="decimal" step="0.001" value="0.017" oninput="calc()"></div>
-    <div style="font-size:13px;color:var(--text-secondary);align-self:end;padding-bottom:6px">Σ L/D: <span id="sld">0</span><br>K total: <span id="kfit">0</span></div>
-  </div>
+  <label class="lbl" for="fseg">Applies to segment</label>
+  <select class="in" id="fseg" onchange="selSeg=parseInt(this.value,10);renderFits()"></select>
+  <div id="fits" style="margin-top:8px"></div>
+  <div style="font-size:13px;color:var(--text-secondary);margin-top:8px">Σ L/D: <span id="sld">0</span> · fT: <span id="ftv">—</span> · K: <span id="kfit">0</span></div>
 </div>
 
 <div class="card">
@@ -112,134 +129,376 @@ button{cursor:pointer}
   </div>
 </div>
 
+<div class="card">
+  <p class="h">Report</p>
+  <div class="g2">
+    <div><label class="lbl" for="logoFile">Logo (uses logo.png beside this page, or pick a file)</label><input class="in" id="logoFile" type="file" accept="image/*" onchange="loadLogo(this)" style="padding:6px"></div>
+    <div style="display:flex;gap:8px;align-items:flex-end"><button type="button" onclick="makeReport()" style="flex:1;height:40px">Generate report</button><button type="button" onclick="window.print()" style="flex:1;height:40px">Print / PDF</button></div>
+  </div>
+</div>
+</div>
+
+<div id="report"></div>
+
 <script>
-var R=8.314462,NG=3000;
+var R=8.314462;
 var FIT=[["90° LR elbow",14],["90° std elbow",30],["45° elbow",16],["Tee, run",20],["Tee, branch",60],["Ball valve (full bore)",3],["Gate valve",8],["Plug valve",18],["Butterfly valve",45],["Globe valve",340],["Swing check",100]];
-var cnt=FIT.map(function(){return 0;});
-var mode='dp';
+var NPS=[[0.824,0.742,0.824,0.742,0.025,0.75,"3/4 in"],[1.049,0.957,1.049,0.957,0.023,1,"1 in"],[1.610,1.500,1.610,1.500,0.021,1.5,"1-1/2 in"],[2.067,1.939,2.067,1.939,0.019,2,"2 in"],[3.068,2.900,3.068,2.900,0.018,3,"3 in"],[4.026,3.826,4.026,3.826,0.017,4,"4 in"],[6.065,5.761,6.065,5.761,0.015,6,"6 in"],[7.981,7.625,7.981,7.625,0.014,8,"8 in"],[10.020,9.562,10.020,9.750,0.014,10,"10 in"],[11.938,11.374,12.000,11.750,0.013,12,"12 in"],[15.000,14.314,15.250,15.000,0.013,16,"16 in"]];
+var MAT={cs:{name:'Carbon steel',rough:0.0018,nom:false},ss:{name:'Stainless steel',rough:0.0006,nom:false},pvc:{name:'PVC',rough:0.00006,nom:false},rtp:{name:'RTP, HDPE liner',rough:0.00006,nom:true},hose:{name:'Corrugated metal hose',rough:0.0018,nom:true}};
+var MATO=[['cs','Carbon steel'],['ss','Stainless steel'],['pvc','PVC (IPS Sch 40/80 only)'],['rtp','RTP, HDPE liner (ID = nominal; enter vendor ID)'],['hose','Corrugated metal hose (ID = nominal; confirm vendor ID)']];
+var WALL=['Schedule 40','Schedule 80','STD','XS'];
+var HMO=[['2.5','2.5× Penflex, turbulent'],['5.5','5.5× Penflex, high velocity'],['custom','Custom (vendor data)']];
+var TRO=[['auto','Auto: Crane sudden change'],['custom','Custom K']];
+var segs=[],selSeg=0,mode='dp',lastR=null,lastS=null,lastO=null,lastW=[],logoData=null;
+function newSeg(){return{mat:'cs',nps:5,sch:0,id:4.026,len:1000,rough:0.0018,lex:0,hmSel:'2.5',hm:2.5,kx:0,kxd:0,ft:0.017,trSel:'auto',ktr:0,cnt:FIT.map(function(){return 0;})};}
 function $(i){return document.getElementById(i);}
 function num(i){return parseFloat($(i).value);}
 function fmt(x,d){if(!isFinite(x))return '—';return x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function dak(ppr,tpr){var A=[0.3265,-1.07,-0.5339,0.01569,-0.05165,0.5475,-0.7361,0.1844,0.1056,0.6134,0.721];var z=1;for(var i=0;i<400;i++){var r=0.27*ppr/(z*tpr);var c1=A[0]+A[1]/tpr+A[2]/Math.pow(tpr,3)+A[3]/Math.pow(tpr,4)+A[4]/Math.pow(tpr,5);var c2=A[5]+A[6]/tpr+A[7]/(tpr*tpr);var c3=A[8]*(A[6]/tpr+A[7]/(tpr*tpr));var zn=1+c1*r+c2*r*r-c3*Math.pow(r,5)+A[9]*(1+A[10]*r*r)*(r*r/Math.pow(tpr,3))*Math.exp(-A[10]*r*r);var zw=0.5*z+0.5*zn;if(!isFinite(zw))return NaN;if(Math.abs(zw-z)<1e-11)return (zw>0.2&&zw<3)?zw:NaN;z=zw;}return NaN;}
-function zf(P,T,sg){var tpc=168+325*sg-12.5*sg*sg,ppc=677+15*sg-37.5*sg*sg;return dak((P/6894.757)/ppc,(T*1.8)/tpc);}
+function pcrit(sg){return{tpc:168+325*sg-12.5*sg*sg,ppc:677+15*sg-37.5*sg*sg};}
+function zf(P,T,sg){var c=pcrit(sg);return dak((P/6894.757)/c.ppc,(T*1.8)/c.tpc);}
 function visc(T,M,rho){var Tr=T*1.8;var K=(9.379+0.01607*M)*Math.pow(Tr,1.5)/(209.2+19.26*M+Tr);var X=3.448+986.4/Tr+0.01009*M;var Y=2.447-0.2224*X;return K*1e-4*Math.exp(X*Math.pow(rho/1000,Y))*1e-3;}
-function fric(Re,rr){if(Re<2300)return 64/Math.max(Re,1);var f=0.25/Math.pow(Math.log10(rr/3.7+5.74/Math.pow(Re,0.9)),2);for(var i=0;i<200;i++){var fn=1/Math.pow(-2*Math.log10(rr/3.7+2.51/(Re*Math.sqrt(f))),2);if(!isFinite(fn))return NaN;if(Math.abs(fn-f)<1e-12)return fn;f=fn;}return NaN;}
-function buildTable(P1,T,sg){
-  var M=28.9647*sg,Mk=M/1000,N=NG,dp=P1/N,p=new Array(N),Z=new Array(N),rho=new Array(N),mu=new Array(N),ct2=new Array(N),k;
-  for(k=0;k<N;k++){p[k]=P1-k*dp;Z[k]=zf(p[k],T,sg);if(!isFinite(Z[k]))return null;}
+function cole(Re,rr){var f=0.25/Math.pow(Math.log10(rr/3.7+5.74/Math.pow(Re,0.9)),2);for(var i=0;i<200;i++){var fn=1/Math.pow(-2*Math.log10(rr/3.7+2.51/(Re*Math.sqrt(f))),2);if(!isFinite(fn))return NaN;if(Math.abs(fn-f)<1e-12)return fn;f=fn;}return NaN;}
+function fric(Re,rr){if(Re<2000)return 64/Math.max(Re,1);if(Re>=4000)return cole(Re,rr);var w=(Re-2000)/2000;return (1-w)*0.032+w*cole(4000,rr);}
+function buildTable(P1,T,sg,NA,NB){
+  var M=28.9647*sg,Mk=M/1000,N=NA+NB,p=new Array(N),Z=new Array(N),rho=new Array(N),mu=new Array(N),ct2=new Array(N),J=new Array(N),k;
+  for(k=0;k<NA;k++)p[k]=P1*(1-0.98*k/(NA-1));
+  for(k=0;k<NB;k++)p[NA+k]=0.02*P1*Math.pow(5e-5,(k+1)/NB);
+  for(k=0;k<N;k++){Z[k]=zf(p[k],T,sg);if(!isFinite(Z[k]))return null;}
   for(k=0;k<N;k++){
-    var dZ=k===0?(Z[0]-Z[1])/dp:(k===N-1?(Z[N-2]-Z[N-1])/dp:(Z[k-1]-Z[k+1])/(2*dp));
+    var a=k===0?0:k-1,b=k===N-1?N-1:k+1;
+    var dZ=(Z[a]-Z[b])/(p[a]-p[b]);
     var den=Z[k]-p[k]*dZ;if(!(den>0))return null;
     rho[k]=p[k]*Mk/(Z[k]*R*T);ct2[k]=(R*T/Mk)*Z[k]*Z[k]/den;mu[k]=visc(T,M,rho[k]);
   }
-  return{n:N,dp:dp,p:p,Z:Z,rho:rho,mu:mu,ct2:ct2,P1:P1};
+  J[0]=0;for(k=1;k<N;k++)J[k]=J[k-1]+(1/rho[k-1]+1/rho[k])/2*(p[k-1]-p[k]);
+  return{n:N,p:p,Z:Z,rho:rho,mu:mu,ct2:ct2,J:J,P1:P1};
 }
-function at(tb,key,P){var x=(tb.P1-P)/tb.dp;var k=Math.floor(x);if(k<0)k=0;if(k>tb.n-2)k=tb.n-2;var u=x-k;return tb[key][k]*(1-u)+tb[key][k+1]*u;}
-function walk(G,tb,D,rr,KL,L){
-  var X=0,pI=0,pM=0,N=tb.n,k;
-  for(k=0;k<N;k++){
-    var m2=G*G/(tb.rho[k]*tb.rho[k]*tb.ct2[k]);
-    if(m2>=1){if(k===0)return{st:'over',Lstar:0};var t=(1-pM)/(m2-pM);return{st:'choked',Lstar:X+pI*t*tb.dp/2,Pstar:tb.p[k-1]-t*tb.dp};}
-    var f=fric(G*D/tb.mu[k],rr);if(!isFinite(f))return{st:'err'};
-    var I=(1-m2)*2*tb.rho[k]/((f/D+KL)*G*G);
-    if(k>0){var Xn=X+(pI+I)*tb.dp/2;if(Xn>=L){var u=(L-X)/(Xn-X);return{st:'sub',P2:tb.p[k-1]-u*tb.dp};}X=Xn;}
-    pI=I;pM=m2;
+function at(tb,key,P){var p=tb.p,lo=0,hi=tb.n-1;if(P>=p[0])return tb[key][0];if(P<=p[hi])return tb[key][hi];while(hi-lo>1){var m=(lo+hi)>>1;if(p[m]>=P)lo=m;else hi=m;}var u=(p[lo]-P)/(p[lo]-p[hi]);return tb[key][lo]*(1-u)+tb[key][hi]*u;}
+function Jat(tb,P){if(P>=tb.p[0])return -(P-tb.p[0])/tb.rho[0];return at(tb,'J',P);}
+function chokeP(tb,G){var g=function(P){return at(tb,'rho',P)*Math.sqrt(at(tb,'ct2',P))-G;};var hi=tb.p[0],lo=tb.p[tb.n-1];if(g(hi)<=0)return NaN;if(g(lo)>0)return lo;for(var i=0;i<120;i++){var m=0.5*(lo+hi);if(g(m)>0)hi=m;else lo=m;if(hi-lo<1e-12*hi)break;}return 0.5*(lo+hi);}
+function junction(md,tb,sA,sB,P1,ktr){
+  var G1=md/sA.A,G2=md/sB.A,rho1=at(tb,'rho',P1),v1=G1/rho1;
+  var con=sB.A<sA.A,beta=con?sB.id/sA.id:sA.id/sB.id;
+  var K=ktr>=0?ktr:(con?0.5*(1-beta*beta):Math.pow(1-beta*beta,2));
+  var F=function(P2){var rho2=at(tb,'rho',P2),v2=G2/rho2,vs=con?v2:v1;return v2*v2/2+K*vs*vs/2-v1*v1/2-(Jat(tb,P2)-Jat(tb,P1));};
+  var P2,lo,hi,i,m;
+  if(F(P1)>0){
+    var Pm=chokeP(tb,con?G2*Math.sqrt(1+K):G2);
+    if(!(Pm<P1)||F(Pm)>0)return{st:'nosol'};
+    lo=Pm;hi=P1;for(i=0;i<120;i++){m=0.5*(lo+hi);if(F(m)>0)hi=m;else lo=m;if(hi-lo<1e-12*hi)break;}P2=0.5*(lo+hi);}
+  else{lo=P1;hi=P1*1.0005;var n=0;while(F(hi)<0&&n<80){lo=hi;hi*=1.02;n++;}if(F(hi)<0)return{st:'err',msg:'Transition recovery did not converge.'};
+    for(i=0;i<120;i++){m=0.5*(lo+hi);if(F(m)<0)lo=m;else hi=m;if(hi-lo<1e-12*hi)break;}P2=0.5*(lo+hi);
+    if(P2>tb.P1)return{st:'err',msg:'Expansion recovery above the assembly inlet pressure is not supported.'};}
+  return{st:'ok',P2:P2,K:K,beta:beta,con:con,dp:P1-P2};
+}
+function walkFrom(G,tb,Pin,s,pts){
+  var p=tb.p,N=tb.n,k0;
+  if(Pin>=p[0])k0=1;else{var lo=0,hi=N-1;while(hi-lo>1){var mm=(lo+hi)>>1;if(p[mm]>=Pin)lo=mm;else hi=mm;}k0=hi;}
+  var rho0=at(tb,'rho',Pin),mu0=at(tb,'mu',Pin),ct0=at(tb,'ct2',Pin);
+  var m2=G*G/(rho0*rho0*ct0);if(m2>=1)return{st:'over',Lstar:0};
+  var f=s.fm*fric(G*s.D/mu0,s.rr);if(!isFinite(f))return{st:'err',msg:'Friction factor did not converge.'};
+  var X=0,pI=(1-m2)*2*rho0/((f/s.D+s.KL)*G*G),pM=m2,pp=Pin;
+  if(pts)pts.push([0,Pin]);
+  for(var k=k0;k<N;k++){
+    m2=G*G/(tb.rho[k]*tb.rho[k]*tb.ct2[k]);var dpk=pp-p[k];
+    if(m2>=1){var t=(1-pM)/(m2-pM),a=pI*t*dpk;
+      if(X+a/2>=s.L){var xi=1-Math.sqrt(Math.max(0,1-2*(s.L-X)/a));var P2c=pp-xi*t*dpk;if(pts)pts.push([s.L,P2c]);return{st:'sub',P2:P2c};}
+      var Ps=pp-t*dpk;if(pts)pts.push([X+a/2,Ps]);return{st:'choked',Lstar:X+a/2,Pstar:Ps};}
+    f=s.fm*fric(G*s.D/tb.mu[k],s.rr);if(!isFinite(f))return{st:'err',msg:'Friction factor did not converge.'};
+    var I=(1-m2)*2*tb.rho[k]/((f/s.D+s.KL)*G*G);
+    var Xn=X+(pI+I)*dpk/2;
+    if(Xn>=s.L){var u=(s.L-X)/(Xn-X);var P2s=pp-u*dpk;if(pts)pts.push([s.L,P2s]);return{st:'sub',P2:P2s};}
+    X=Xn;pI=I;pM=m2;pp=p[k];if(pts)pts.push([X,pp]);
   }
-  return{st:'floor'};
+  return{st:'floor',msg:'Pressure table exhausted.'};
 }
-function capacity(tb,D,rr,KL,L){
-  var hi=tb.rho[0]*Math.sqrt(tb.ct2[0]),lo=0,w,i,ok=false;
-  for(i=0;i<120;i++){var m=0.5*(lo+hi);w=walk(m,tb,D,rr,KL,L);if(w.st==='err')return null;
-    if(w.st==='over'||(w.st==='choked'&&w.Lstar<L))hi=m;else lo=m;if(hi-lo<1e-11*hi){ok=true;break;}}
-  if(!ok)return null;
-  var G=0.5*(lo+hi);w=walk(G,tb,D,rr,KL,L);
-  var Ps=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);if(!isFinite(Ps))return null;
-  return{G:G,Pstar:Ps};
+function chain(md,tb,S,trace){
+  var P=tb.P1,out=[],tr=[],Lt=0;
+  for(var i=0;i<S.length;i++){var s=S[i];
+    if(i>0){if(Math.abs(S[i-1].id-s.id)>1e-9){var j=junction(md,tb,S[i-1],s,P,s.ktr);if(j.st!=='ok')return{st:j.st,seg:i,out:out,tr:tr,msg:j.msg};tr.push({K:j.K,beta:j.beta,con:j.con,pin:P,pout:j.P2});P=j.P2;}else tr.push(null);}
+    var G=md/s.A,pts=trace?[]:null,w=walkFrom(G,tb,P,s,pts);
+    if(w.st==='sub'){out.push({pin:P,pout:w.P2,G:G,pts:pts});P=w.P2;Lt+=s.L;}
+    else if(w.st==='choked'){out.push({pin:P,pout:w.Pstar,G:G,pts:pts});return{st:'choked',Lstar:Lt+w.Lstar,Lend:Lt+s.L,Lin:w.Lstar,P2:w.Pstar,seg:i,out:out,tr:tr};}
+    else return{st:w.st,seg:i,out:out,tr:tr,msg:w.msg};}
+  return{st:'sub',P2:P,out:out,tr:tr,seg:-1};
 }
-function solve(o){
-  var M=28.9647*o.sg,Mk=M/1000,T=(o.t1+459.67)/1.8,Tstd=288.7056,Pstd=o.pb*6894.757;
+function limTxt(c){
+  if(c.st==='choked')return 'chokes at the end of segment '+(c.seg+1);
+  if(c.st==='nosol')return 'no subsonic solution at the transition into segment '+(c.seg+1)+' (transition-model limit, not a confirmed choke)';
+  if(c.st==='over')return 'sonic at the inlet of segment '+(c.seg+1);
+  return 'limited by an unsupported condition ('+(c.msg||c.st)+')';
+}
+function capChain(tb,S){
+  var hi=tb.rho[0]*Math.sqrt(tb.ct2[0])*S[0].A,lo=0,w,i,ok=false,lim=null,feas=null,last=S.length-1;
+  for(i=0;i<120;i++){var m=0.5*(lo+hi);w=chain(m,tb,S);
+    if(w.st==='err'||w.st==='floor')return{ok:false,msg:(w.msg||w.st)+' during capacity search'};
+    if(w.st==='sub'){lo=m;feas=w;}else{hi=m;lim=w;}
+    if(hi-lo<1e-11*hi){ok=true;break;}}
+  if(!ok||!lim)return{ok:false,msg:'capacity search did not converge'};
+  return{ok:true,md:0.5*(lo+hi),st:lim.st,seg:lim.seg,junc:lim.st!=='choked',internal:lim.st!=='choked'||lim.seg<last,Pstar:lim.st==='choked'?lim.P2:NaN,Pcm:feas?feas.P2:NaN};
+}
+function flowChain(tb,S,P2s,cap){
+  var hi=(cap&&cap.ok)?cap.md*(1+1e-6):tb.rho[0]*Math.sqrt(tb.ct2[0])*S[0].A,lo=0,w,i,ok=false,feas=null,lim=null,hiSub=false;
+  for(i=0;i<120;i++){var m=0.5*(lo+hi);w=chain(m,tb,S);
+    if(w.st==='sub'){if(w.P2>P2s){lo=m;feas=w;}else{hi=m;hiSub=true;lim=null;}}else{hi=m;hiSub=false;lim=w;}
+    if(hi-lo<1e-11*hi){ok=true;break;}}
+  if(!ok)return{err:'Flow solver did not converge.'};
+  if(!feas)return{err:'No feasible flow found; check inputs.'};
+  var tol=1e-7*tb.P1;
+  if(feas.P2-P2s<=tol){var mdf=0.5*(lo+hi);w=chain(mdf,tb,S);if(w.st!=='sub'||Math.abs(w.P2-P2s)>tol){w=feas;mdf=lo;}
+    if(Math.abs(w.P2-P2s)>tol)return{err:'Pressure target not resolved: converged flow does not meet the outlet-pressure residual.'};
+    return{md:mdf,limited:false,ch:w};}
+  if(lim&&!hiSub){if(lim.st==='err'||lim.st==='floor')return{err:'Flow is limited by an unsupported condition: '+(lim.msg||lim.st)};return{md:lo,limited:true,lim:lim,ch:feas};}
+  return{err:'Pressure target not resolved: the outlet pressure jumps across the converged flow bracket with no verified limiting event (a solver discontinuity). Try a slightly different outlet pressure or check the transitional-Re regime.'};
+}
+function solve(o,S){
+  var M=28.9647*o.sg,Mk=M/1000,T=(o.t1+459.67)/1.8,Tstd=288.7056,Pstd=o.pb*6894.757,wn=[],P2s=NaN,i,last=S.length-1;
+  var P1=(o.p1+o.patm)*6894.757,pc=pcrit(o.sg),tpr=T*1.8/pc.tpc,ppr=(P1/6894.757)/pc.ppc;
+  if(tpr<1.0)return{err:'Tpr = '+fmt(tpr,2)+'. Conditions are outside this calculator\'s supported property range; gas composition and phase-equilibrium analysis are needed.'};
+  if(tpr>3.0)return{err:'Tpr = '+fmt(tpr,2)+' is above the DAK Z-factor range (1.0–3.0).'};
+  if(ppr>30)return{err:'Inlet Ppr = '+fmt(ppr,1)+' is above the DAK Z-factor range (30).'};
+  if(tpr<1.05)wn.push('Tpr = '+fmt(tpr,2)+'; Z-factor accuracy degrades close to the pseudocritical temperature.');
+  if(o.t1<40||o.t1>340)wn.push('Temperature is outside the range where the Lee-Gonzalez-Eakin viscosity correlation is normally applied (roughly 40–340 °F).');
+  if(P1/6894.757>8000)wn.push('Inlet pressure above 8,000 psia; viscosity correlation extrapolated.');
   var zstd=zf(Pstd,Tstd,o.sg);if(!isFinite(zstd))return{err:'Z-factor did not converge at base conditions.'};
-  var rhostd=Pstd*Mk/(zstd*R*Tstd);
-  var D=o.id*0.0254,A=Math.PI*D*D/4,L=(o.len+o.lex)*0.3048,rr=o.rough*0.0254/D,K=o.ld*o.ft,KL=K/L;
-  var P1=(o.p1+o.patm)*6894.757;
-  var tb=buildTable(P1,T,o.sg);if(!tb)return{err:'Gas property model failed; check temperature, pressure, and SG.'};
-  var cap=capacity(tb,D,rr,KL,L);if(!cap)return{err:'Capacity solver did not converge.'};
-  var toQ=function(g){return g*A/rhostd*86400/0.0283168/1e6;};
-  var G,P2,choked=false,w;
+  var rhostd=Pstd*Mk/(zstd*R*Tstd),Lt=0;for(i=0;i<S.length;i++)Lt+=S[i].L;
+  var tb=buildTable(P1,T,o.sg,3000,600);if(!tb)return{err:'Gas property model failed; check temperature, pressure, and SG.'};
+  var toQ=function(m){return m/rhostd*86400/0.0283168/1e6;},psig=function(P){return P/6894.757-o.patm;};
+  var cap=capChain(tb,S);
+  var capTxt=function(c){return c.ok?' Capacity '+fmt(toQ(c.md),2)+' MMSCFD: '+limTxt(c)+(isFinite(c.Pstar)?' at '+fmt(psig(c.Pstar),1)+' psig':'')+'.':' Capacity unavailable ('+c.msg+').';};
+  var md,P2=NaN,choked=false,internal=false,junc=false,chokeSeg=-1,Pch=NaN,ch,limSt='';
   if(o.mode==='dp'){
-    G=o.q*1e6*0.0283168/86400*rhostd/A;
-    if(G>cap.G*(1+1e-8))return{cap:true,qmax:toQ(cap.G),pcap:cap.Pstar/6894.757-o.patm};
-    w=walk(G,tb,D,rr,KL,L);
-    if(w.st==='sub')P2=w.P2;else if(w.st==='choked')P2=w.Pstar;else return{err:'Outlet pressure not resolved; reduce length or raise inlet pressure.'};
-    choked=G>=cap.G*(1-1e-6);
+    md=o.q*1e6*0.0283168/86400*rhostd;ch=chain(md,tb,S);
+    if(ch.st==='sub')P2=ch.P2;
+    else if(ch.st==='choked'){
+      if(ch.Lend-ch.Lstar<=1e-6*ch.Lend){choked=true;limSt='choked';chokeSeg=ch.seg;internal=ch.seg<last;Pch=ch.P2;P2=internal?NaN:ch.P2;}
+      else return{cap:true,msg:'Rate exceeds what this assembly can pass at the inlet pressure: Mach 1 is reached inside segment '+(ch.seg+1)+' at about '+fmt(ch.Lin/0.3048,0)+' ft of its '+fmt(S[ch.seg].L/0.3048,0)+' ft (choke pressure '+fmt(psig(ch.P2),1)+' psig).'+capTxt(cap)};}
+    else if(ch.st==='nosol'||ch.st==='over')return{cap:true,msg:'Rate cannot pass this assembly at the inlet pressure: '+limTxt(ch)+'.'+capTxt(cap)};
+    else return{err:ch.msg||'Outlet pressure not resolved; conditions are outside the supported range.'};
   }else{
-    var P2s=(o.p2+o.patm)*6894.757;
+    P2s=(o.p2+o.patm)*6894.757;
     if(!(P2s<P1))return{err:'Outlet pressure must be below inlet pressure.'};
-    if(P2s<=cap.Pstar){choked=true;G=cap.G;P2=cap.Pstar;}
-    else{var lo=0,hi=cap.G,ok=false;
-      for(var i=0;i<120;i++){var m=0.5*(lo+hi);w=walk(m,tb,D,rr,KL,L);var pm=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);
-        if(!isFinite(pm))return{err:'Flow solver failed.'};
-        if(pm>P2s)lo=m;else hi=m;if(hi-lo<1e-11*hi){ok=true;break;}}
-      if(!ok)return{err:'Flow solver did not converge.'};
-      G=0.5*(lo+hi);w=walk(G,tb,D,rr,KL,L);P2=w.st==='sub'?w.P2:(w.st==='choked'?w.Pstar:NaN);if(!isFinite(P2))return{err:'Flow solver failed.'};}
+    var fs=flowChain(tb,S,P2s,cap);if(fs.err)return{err:fs.err};
+    md=fs.md;ch=fs.ch;
+    if(fs.limited){choked=true;limSt=fs.lim.st;chokeSeg=fs.lim.seg;junc=limSt!=='choked';internal=junc||chokeSeg<last;Pch=limSt==='choked'?fs.lim.P2:NaN;P2=internal?NaN:ch.P2;}
+    else P2=ch.P2;
   }
-  if(!(G>0)||!(P2>0))return{err:'Solver returned invalid values.'};
-  var z1=tb.Z[0],z2=at(tb,'Z',P2),rho1=tb.rho[0],rho2=at(tb,'rho',P2),c2=Math.sqrt(at(tb,'ct2',P2));
-  var v1=G/rho1,v2=G/rho2,mdot=G*A,Re1=G*D/tb.mu[0],f1=fric(Re1,rr);
-  return{choked:choked,P1:P1,P2:P2,dp:(P1-P2)/6894.757,p2g:P2/6894.757-o.patm,q:toQ(G),qmax:toQ(cap.G),pcap:cap.Pstar/6894.757-o.patm,
-    v1:v1*3.28084,v2:v2*3.28084,ve:100/Math.sqrt(rho2*0.062428),ma:v2/c2,
-    Re:Re1,f:f1,K:K,z1:z1,z2:z2,mu:tb.mu[0]*1000,rho1:rho1*0.062428,mdot:mdot*2.20462*3600,acfm:mdot/rho1*2118.88,ltot:o.len+o.lex};
+  if(!(md>0))return{err:'Solver returned invalid values.'};
+  var nres=internal?(junc?chokeSeg:chokeSeg+1):ch.out.length;if(nres>ch.out.length)nres=ch.out.length;
+  var qf=toQ(md),qm=cap.ok?toQ(cap.md):NaN,dpf=isFinite(P2)?(P1-P2)/6894.757:NaN;
+  var tb2=buildTable(P1,T,o.sg,1500,300),ok=true,parts=[];
+  if(!tb2){ok=false;parts.push('coarse table failed');}
+  else{var cap2=cap.ok?capChain(tb2,S):null;
+    if(cap.ok){if(cap2&&cap2.ok){var dc=Math.abs(qm-toQ(cap2.md));if(!(dc<=1e-4+1e-4*qm))ok=false;parts.push('cap '+dc.toExponential(1)+' MMSCFD');}else{ok=false;parts.push('coarse capacity failed');}}
+    else parts.push('cap n/a');
+    if(o.mode==='dp'){var c2=chain(md,tb2,S);
+      if(isFinite(P2)){var dd=(c2.st==='sub'||c2.st==='choked')?Math.abs(dpf-(P1-c2.P2)/6894.757):NaN;if(!(dd<=1e-3+1e-4*dpf))ok=false;parts.push('ΔP '+dd.toExponential(1)+' psi');}
+      else if(isFinite(Pch)){var dk=c2.st==='choked'?Math.abs(Pch-c2.P2)/6894.757:NaN;if(!(dk<=1e-3+1e-4*(P1-Pch)/6894.757))ok=false;parts.push('choke P '+dk.toExponential(1)+' psi');}
+      else parts.push('ΔP n/a');}
+    else{var f2=flowChain(tb2,S,P2s,cap2);if(f2.err){ok=false;parts.push('coarse flow failed');}
+      else{var dq=Math.abs(qf-toQ(f2.md));if(!(dq<=1e-4+1e-4*qf))ok=false;parts.push('Q '+dq.toExponential(1)+' MMSCFD');
+        if(choked&&!internal){var de=Math.abs(P2-f2.ch.P2)/6894.757;if(!(de<=1e-3+1e-4*dpf))ok=false;parts.push('P2 '+de.toExponential(1)+' psi');}}}}
+  var segr=[],trr=[],maxMa=0,maxSeg=0;
+  for(i=0;i<nres;i++){var s=S[i],oo=ch.out[i];var rin=at(tb,'rho',oo.pin),rout=at(tb,'rho',oo.pout),cin=Math.sqrt(at(tb,'ct2',oo.pin)),cout=Math.sqrt(at(tb,'ct2',oo.pout)),Rei=oo.G*s.D/at(tb,'mu',oo.pin);
+    var isLim=choked&&limSt==='choked'&&i===chokeSeg;var main=oo.G/rin/cin,maout=oo.G/rout/cout;if(main>maxMa){maxMa=main;maxSeg=i;}if(maout>maxMa){maxMa=maout;maxSeg=i;}
+    segr.push({pin:psig(oo.pin),pout:psig(oo.pout),dp:(oo.pin-oo.pout)/6894.757,vin:oo.G/rin*3.28084,vout:oo.G/rout*3.28084,main:main,ma:maout,Re:Rei,f:s.fm*fric(Rei,s.rr),ve:100/Math.sqrt(rout*0.062428),lim:isLim});}
+  for(i=0;i<ch.tr.length&&i<nres;i++){var t=ch.tr[i];trr.push(t?{K:t.K,beta:t.beta,con:t.con,dp:(t.pin-t.pout)/6894.757}:null);}
+  var s0=S[0],sl=S[last],G1=md/s0.A,GL=md/sl.A,rho1=tb.rho[0],rho2=isFinite(P2)?at(tb,'rho',P2):NaN,c2o=isFinite(P2)?Math.sqrt(at(tb,'ct2',P2)):NaN;
+  return{choked:choked,internal:internal,junc:junc,limSt:limSt,chokeSeg:chokeSeg,Pch:isFinite(Pch)?psig(Pch):NaN,P1:P1,P2:P2,dp:dpf,p2g:isFinite(P2)?psig(P2):NaN,q:qf,md:md,tb:tb,
+    capOk:cap.ok,capMsg:cap.msg,qmax:qm,capLim:cap.ok?limTxt(cap):'',pcap:cap.ok&&isFinite(cap.Pstar)?psig(cap.Pstar):NaN,capInt:cap.ok?cap.internal:false,
+    pcm:o.mode==='q'&&internal?psig(ch.P2):(cap.ok&&isFinite(cap.Pcm)?psig(cap.Pcm):NaN),
+    v1:G1/rho1*3.28084,v2:isFinite(P2)?GL/rho2*3.28084:NaN,ve:isFinite(P2)?100/Math.sqrt(rho2*0.062428):NaN,ma:isFinite(P2)?GL/rho2/c2o:NaN,maxMa:maxMa,maxSeg:maxSeg,
+    gcOk:ok,gcTxt:parts.join(' · '),tpr:tpr,ppr:ppr,wn:wn,segr:segr,trr:trr,nres:nres,z1:tb.Z[0],z2:isFinite(P2)?at(tb,'Z',P2):NaN,mu:tb.mu[0]*1000,rho1:rho1*0.062428,mdot:md*2.20462*3600,acfm:md/rho1*2118.88,ltot:Lt/0.3048};
+}
+function segParams(s,i,e){
+  var n=i+1;
+  if(!(s.id>0))e.push('Segment '+n+': inside diameter must be positive.');
+  if(!(s.len>0))e.push('Segment '+n+': length must be positive.');
+  if(!(s.rough>=0))e.push('Segment '+n+': roughness must be 0 or more.');
+  if(!(s.lex>=0))e.push('Segment '+n+': extra equivalent length must be 0 or more.');
+  if(!(s.ft>=0))e.push('Segment '+n+': fT must be 0 or more.');
+  if(!(s.kx>=0))e.push('Segment '+n+': additional K must be 0 or more.');
+  if(!(s.kxd>=0))e.push('Segment '+n+': K reference bore must be 0 or more.');
+  if(s.mat==='hose'&&!(s.hm>0))e.push('Segment '+n+': hose friction multiplier must be positive.');
+  if(i>0&&s.trSel==='custom'&&!(s.ktr>=0))e.push('Segment '+n+': transition K must be 0 or more.');
+  var D=s.id*0.0254,A=Math.PI*D*D/4,L=(s.len+s.lex)*0.3048,ld=0;
+  for(var j=0;j<FIT.length;j++)ld+=s.cnt[j]*FIT[j][1];
+  var Kf=ld*s.ft,Kx=s.kx*(s.kxd>0?Math.pow(s.id/s.kxd,4):1),K=Kf+Kx;
+  return{D:D,A:A,L:L,rr:s.rough*0.0254/D,K:K,Kf:Kf,Kx:Kx,KL:K/L,fm:s.mat==='hose'?s.hm:1,name:MAT[s.mat].name,id:s.id,len:s.len,lex:s.lex,ktr:s.trSel==='custom'?s.ktr:-1};
 }
 function calc(){
-  var ld=0;for(var i=0;i<FIT.length;i++)ld+=cnt[i]*FIT[i][1];
-  var o={mode:mode,q:num('q'),sg:num('sg'),t1:num('t1'),p1:num('p1'),p2:num('p2'),id:num('id'),len:num('len'),rough:num('rough'),lex:num('lex'),ft:num('ft'),patm:num('patm'),pb:parseFloat($('pb').value),ld:ld};
-  $('sld').textContent=fmt(ld,0);$('kfit').textContent=fmt(ld*o.ft,2);
-  var e=[];
+  var o={mode:mode,q:num('q'),sg:num('sg'),t1:num('t1'),p1:num('p1'),p2:num('p2'),patm:num('patm'),pb:parseFloat($('pb').value)};
+  var e=[],S=[],i;lastR=null;
   if(!(o.sg>0))e.push('Specific gravity must be positive.');
   if(!(o.t1>-459.67))e.push('Temperature must be above −459.67 °F.');
   if(!(o.patm>0))e.push('Atmospheric pressure must be positive.');
-  if(!(o.id>0))e.push('Inside diameter must be positive.');
-  if(!(o.len>0))e.push('Length must be positive.');
-  if(!(o.rough>=0))e.push('Roughness must be 0 or more.');
-  if(!(o.lex>=0))e.push('Extra equivalent length must be 0 or more.');
-  if(!(o.ft>=0))e.push('fT must be 0 or more.');
   if(!(o.p1+o.patm>0))e.push('Inlet absolute pressure must be positive.');
   if(mode==='dp'&&!(o.q>0))e.push('Gas rate must be positive.');
   if(mode==='q'&&!(o.p2+o.patm>0))e.push('Outlet absolute pressure must be positive.');
-  if(e.length){show(null,e,true);return;}
+  for(i=0;i<segs.length;i++)S.push(segParams(segs[i],i,e));
+  var fs=segs[selSeg],ld=0;for(i=0;i<FIT.length;i++)ld+=fs.cnt[i]*FIT[i][1];
+  $('sld').textContent=fmt(ld,0);$('ftv').textContent=fmt(fs.ft,3);$('kfit').textContent=fmt(ld*fs.ft,2);
+  if(e.length){show(null,e,true,S);return;}
   var w=[];
   if(o.sg<0.55||o.sg>1.0)w.push('Specific gravity outside 0.55–1.0; Standing pseudocritical correlation loses accuracy.');
-  var r=solve(o);
-  if(r.err){show(null,[r.err],true);return;}
-  if(r.cap){show(null,['Rate exceeds the choked capacity of this line at the inlet pressure: '+fmt(r.qmax,2)+' MMSCFD at '+fmt(r.pcap,1)+' psig exit. Reduce rate, shorten length, or increase diameter.'],true);return;}
-  if(r.choked)w.push('Flow is choked: isothermal Mach 1 at the outlet. The exit pressure shown is the choke pressure; lowering downstream pressure further does not increase flow.');
-  else if(r.ma>0.3)w.push('Outlet isothermal Mach above 0.3; isothermal model accuracy degrades.');
-  if(r.v2>r.ve)w.push('Outlet velocity exceeds the API RP 14E C=100 value. Screening only; erosion risk depends on solids and service.');
-  else if(r.v2>60)w.push('Outlet velocity above 60 ft/s. Screening flag for noise and vibration; verify for the service.');
-  if(r.Re<4000)w.push('Laminar or transitional flow at the inlet (Re below 4000).');
-  if(!r.choked&&(r.P1-r.P2)/r.P1>0.4)w.push('ΔP above 40% of inlet absolute pressure; consider segmenting the line.');
-  show(r,w,false);
+  var r=solve(o,S);
+  if(r.err){show(null,[r.err],true,S);return;}
+  if(r.cap){show(null,[r.msg],true,S);return;}
+  w=w.concat(r.wn);
+  var hasHose=false,hasRtp=false,hasTr=false;for(i=0;i<segs.length;i++){if(segs[i].mat==='hose')hasHose=true;if(segs[i].mat==='rtp')hasRtp=true;if(i>0&&Math.abs(segs[i].id-segs[i-1].id)>1e-9)hasTr=true;}
+  if(hasTr)w.push('Diameter transitions use an isothermal real-gas Bernoulli balance plus Crane sudden-change K (or your custom K). Not independently validated; a gradual reducer or expander has lower loss than the sudden-change default, and the loss model is least reliable at high Mach.');
+  if(hasHose)w.push('Corrugated hose segments use multiplier × steel-pipe friction at the same ID (Penflex EB-111 basis; 2.5× turbulent, 5.5× high-velocity sensitivity). Run both. Confirm the manufacturer\'s actual ID. Get vendor data if the hose dominates ΔP, the size selection changes, or flow approaches choke. Hose vibration and velocity limits are not checked. Put end-connection losses in "Additional K", not in extra equivalent length (which is hose-basis).');
+  if(hasRtp)w.push('RTP: ID defaults to nominal; enter the manufacturer\'s liner ID. Roughness 0.00006 in (HDPE).');
+  if(!r.capOk)w.push('Capacity is unavailable for this assembly: '+r.capMsg+'. The operating result above is unaffected.');
+  if(r.choked&&r.internal){
+    if(r.limSt==='choked')w.push('Flow is choked internally at the end of segment '+(r.chokeSeg+1)+(isFinite(r.Pch)?' (local choke pressure '+fmt(r.Pch,1)+' psig)':'')+'. Segments downstream are not resolved by this model and the assembly outlet pressure is not available; the requested outlet pressure is not confirmed.'+(mode==='q'&&isFinite(r.pcm)?' Flow is independent of backpressure below about '+fmt(r.pcm,1)+' psig.':''));
+    else if(r.limSt==='nosol')w.push('Flow is limited at the transition into segment '+(r.chokeSeg+1)+': the transition model has no subsonic solution there. This is a limit of the sudden-change loss model, not a confirmed physical choke; segments from '+(r.chokeSeg+1)+' onward are not resolved. Analyze that reducer with a proper compressible model or vendor data.'+(mode==='q'&&isFinite(r.pcm)?' Below about '+fmt(r.pcm,1)+' psig backpressure the computed flow no longer increases.':''));
+    else w.push('Flow is limited: '+limTxt({st:r.limSt,seg:r.chokeSeg})+'. Downstream segments are not resolved.');}
+  else if(r.choked)w.push('Flow is at the isothermal choke limit: Mach 1 at the assembly outlet. The outlet pressure shown is the choke pressure; lowering downstream pressure further does not increase flow.');
+  else if(r.maxMa>=0.98)w.push('Near the flow limit (Mach '+fmt(r.maxMa,3)+' in segment '+(r.maxSeg+1)+'). Results are very sensitive to small changes in rate, inlet pressure, or length here.');
+  else if(r.maxMa>0.3)w.push('Mach above 0.3 in segment '+(r.maxSeg+1)+' (max '+fmt(r.maxMa,3)+'); isothermal model accuracy degrades.');
+  var vmax=0,vseg=0;for(i=0;i<r.segr.length;i++)if(r.segr[i].vout/r.segr[i].ve>vmax){vmax=r.segr[i].vout/r.segr[i].ve;vseg=i;}
+  if(vmax>1)w.push('Segment '+(vseg+1)+' outlet velocity exceeds the API RP 14E C=100 value. Screening only; erosion risk depends on solids and service.');
+  else{var v60=-1;for(i=0;i<r.segr.length;i++)if(r.segr[i].vout>60){v60=i;break;}if(v60>=0)w.push('Segment '+(v60+1)+' outlet velocity above 60 ft/s. Screening flag for noise and vibration; verify for the service.');}
+  for(i=0;i<r.segr.length;i++){if(r.segr[i].Re<2000){w.push('Segment '+(i+1)+': laminar flow at inlet (Re below 2,000).');break;}if(r.segr[i].Re<4000){w.push('Segment '+(i+1)+': transitional flow at inlet (Re 2,000–4,000). Friction factor is interpolated between laminar at Re 2,000 and Colebrook at Re 4,000; this regime is physically indeterminate, so treat the result as screening only.');break;}}
+  if(!r.choked&&isFinite(r.P2)&&(r.P1-r.P2)/r.P1>0.4)w.push('ΔP above 40% of inlet absolute pressure; consider segmenting the line.');
+  if(!r.gcOk)w.push('Grid self-check failed tolerance (independent half-grid recomputation: '+r.gcTxt+'). Treat the last digits as uncertain.');
+  lastR=r;lastS=S;lastO=o;lastW=w;
+  show(r,w,false,S);
 }
-function show(r,w,isErr){
-  var ch=r&&r.choked;
-  if(mode==='dp'){$('r1l').textContent='Pressure drop';$('r2l').textContent=ch?'Outlet pressure (choked)':'Outlet pressure';
-    $('r1v').textContent=r?fmt(r.dp,r.dp<10?2:1)+' psi':'—';$('r2v').textContent=r?fmt(r.p2g,1)+' psig':'—';}
-  else{$('r1l').textContent=ch?'Flow rate (choked)':'Flow rate';$('r2l').textContent=ch?'Exit pressure (choked)':'Pressure drop';
-    $('r1v').textContent=r?fmt(r.q,r.q<1?3:2)+' MMSCFD':'—';$('r2v').textContent=r?(ch?fmt(r.p2g,1)+' psig':fmt(r.dp,r.dp<10?2:1)+' psi'):'—';}
-  var ids=['v1','v2','ve','ma','qmax','re','ff','kk','zz','mu','rho','mdot','acfm','ltot'];
-  if(!r){for(var k=0;k<ids.length;k++)$(ids[k]).textContent='—';}
-  else{$('v1').textContent=fmt(r.v1,1)+' ft/s';$('v2').textContent=fmt(r.v2,1)+' ft/s';$('ve').textContent=fmt(r.ve,1)+' ft/s';
-    $('ma').textContent=fmt(r.ma,3);$('qmax').textContent=fmt(r.qmax,2)+' MMSCFD at '+fmt(r.pcap,1)+' psig';
-    $('re').textContent=fmt(r.Re,0);$('ff').textContent=fmt(r.f,4);$('kk').textContent=fmt(r.K,2);$('zz').textContent=fmt(r.z1,4)+' / '+fmt(r.z2,4);$('mu').textContent=fmt(r.mu,4)+' cP';
-    $('rho').textContent=fmt(r.rho1,3)+' lb/ft³';$('mdot').textContent=fmt(r.mdot,0)+' lb/hr';$('acfm').textContent=fmt(r.acfm,1)+' ACFM';$('ltot').textContent=fmt(r.ltot,0)+' ft';}
-  var h='';for(var j=0;j<w.length;j++)h+='<div class="'+(isErr?'err':'warn')+'">'+w[j]+'</div>';$('warns').innerHTML=h;
+function kv(a,b){return '<div class="kv"><span>'+a+'</span><span>'+b+'</span></div>';}
+function show(r,w,isErr,S){
+  var ch=r&&r.choked,it=r&&r.internal;
+  var chokeLbl=r?(r.limSt==='choked'?'Choke pressure, end of seg '+(r.chokeSeg+1):(r.limSt==='nosol'?'Model limit at transition into seg '+(r.chokeSeg+1):'Limit at seg '+(r.chokeSeg+1))):'';
+  if(mode==='dp'){$('r1l').textContent='Pressure drop';$('r1v').textContent=r?(it?'— internal limit':fmt(r.dp,r.dp<10?2:1)+' psi'):'—';
+    $('r2l').textContent=it?chokeLbl:(ch?'Outlet pressure (choked)':'Outlet pressure');$('r2v').textContent=r?(it?(isFinite(r.Pch)?fmt(r.Pch,1)+' psig':'—'):fmt(r.p2g,1)+' psig'):'—';}
+  else{$('r1l').textContent=ch?'Flow rate (limited)':'Flow rate';$('r1v').textContent=r?fmt(r.q,r.q<1?3:2)+' MMSCFD':'—';
+    $('r2l').textContent=it?chokeLbl:(ch?'Exit pressure (choked)':'Pressure drop');$('r2v').textContent=r?(it?(isFinite(r.Pch)?fmt(r.Pch,1)+' psig':'—'):(ch?fmt(r.p2g,1)+' psig':fmt(r.dp,r.dp<10?2:1)+' psi')):'—';}
+  var ids=['v1','v2','ve','ma','mam','qmax','zz','pr','mu','rho','mdot','acfm','ltot','gc'];
+  if(!r){for(var k=0;k<ids.length;k++)$(ids[k]).textContent='—';$('segres').innerHTML='';}
+  else{$('v1').textContent=fmt(r.v1,1)+' ft/s';$('v2').textContent=it?'— unresolved':fmt(r.v2,1)+' ft/s';$('ve').textContent=it?'—':fmt(r.ve,1)+' ft/s';
+    $('ma').textContent=it?'— unresolved':fmt(r.ma,3);$('mam').textContent=fmt(r.maxMa,3)+' (seg '+(r.maxSeg+1)+')';
+    $('qmax').textContent=r.capOk?fmt(r.qmax,2)+' MMSCFD; '+r.capLim+(isFinite(r.pcap)?' at '+fmt(r.pcap,1)+' psig':'')+(r.capInt?' (internal)':''):'unavailable: '+r.capMsg;
+    $('zz').textContent=fmt(r.z1,4)+' / '+(it?'—':fmt(r.z2,4));$('pr').textContent=fmt(r.tpr,2)+' / '+fmt(r.ppr,2);$('mu').textContent=fmt(r.mu,4)+' cP';
+    $('rho').textContent=fmt(r.rho1,3)+' lb/ft³';$('mdot').textContent=fmt(r.mdot,0)+' lb/hr';$('acfm').textContent=fmt(r.acfm,1)+' ACFM';$('ltot').textContent=fmt(r.ltot,0)+' ft';
+    $('gc').textContent=(r.gcOk?'pass: ':'FAIL: ')+r.gcTxt;
+    var h='';for(var i=0;i<S.length;i++){var s=S[i];
+      if(i>0&&i-1<r.trr.length&&r.trr[i-1]){var t=r.trr[i-1];h+='<div class="tr">Transition into segment '+(i+1)+': '+(t.con?'contraction':'expansion')+', β = '+fmt(t.beta,3)+', K = '+fmt(t.K,3)+' on small-bore velocity, static pressure change '+(t.dp>=0?'−':'+')+fmt(Math.abs(t.dp),2)+' psi</div>';}
+      if(i>=r.nres){h+='<div class="sh">Segment '+(i+1)+': '+s.name+', ID '+fmt(s.id,3)+' in, '+fmt(s.len,0)+' ft — not resolved (downstream of the limiting location)</div>';continue;}
+      var g=r.segr[i];
+      h+='<div class="sh">Segment '+(i+1)+(g.lim?' (choked at end)':'')+': '+s.name+', ID '+fmt(s.id,3)+' in, '+fmt(s.len,0)+' ft'+(s.lex>0?' + '+fmt(s.lex,0)+' ft eq.':'')+(s.fm!==1?', '+s.fm+'× steel f':'')+', K '+fmt(s.K,2)+(s.Kx>0?' (fittings '+fmt(s.Kf,2)+' + added '+fmt(s.Kx,2)+')':'')+'</div>'
+        +kv('Inlet → outlet',fmt(g.pin,1)+' → '+fmt(g.pout,1)+' psig')+kv('ΔP',fmt(g.dp,g.dp<10?2:1)+' psi')+kv('Velocity in → out',fmt(g.vin,1)+' → '+fmt(g.vout,1)+' ft/s')+kv('Mach in → out / API 14E velocity',fmt(g.main,3)+' → '+fmt(g.ma,3)+' / '+fmt(g.ve,1)+' ft/s')+kv('Re / Darcy f (inlet)',fmt(g.Re,0)+' / '+fmt(g.f,4));}
+    $('segres').innerHTML=h;}
+  var hh='';for(var j=0;j<w.length;j++)hh+='<div class="'+(isErr?'err':'warn')+'">'+w[j]+'</div>';$('warns').innerHTML=hh;
 }
-function setMode(m){mode=m;$('mDp').className='mode'+(m==='dp'?' on':'');$('mQ').className='mode'+(m==='q'?' on':'');
-  $('qRow').style.display=m==='dp'?'':'none';$('p2Row').style.display=m==='q'?'':'none';calc();}
-function pickSize(){var v=$('nps').value.split(',');$('id').value=v[parseInt($('sch').value,10)];$('ft').value=v[4];calc();}
-function step(i,d){cnt[i]=Math.max(0,cnt[i]+d);$('c'+i).textContent=cnt[i];calc();}
-(function(){var h='';for(var i=0;i<FIT.length;i++){h+='<div class="stp"><span>'+FIT[i][0]+' <span style="color:var(--text-muted);font-size:12px">L/D '+FIT[i][1]+'</span></span><span style="display:flex;align-items:center;gap:10px"><button type="button" aria-label="Remove one" onclick="step('+i+',-1)">−</button><span id="c'+i+'" style="min-width:18px;text-align:center;font-variant-numeric:tabular-nums">0</span><button type="button" aria-label="Add one" onclick="step('+i+',1)">+</button></span></div>';}
-  $('fits').innerHTML=h;setMode('dp');})();
+function loadLogo(inp){var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(e){logoData=e.target.result;if($('report').innerHTML)makeReport();};rd.readAsDataURL(f);}
+function rl(a,b){return '<div class="rl"><span>'+a+'</span><span>= '+b+'</span></div>';}
+function profSvg(ch,S,o){
+  var W=640,H=280,ml=62,mr=16,mt=30,mb=44,i,j,x0=0,pw=W-ml-mr,ph=H-mt-mb,segsPts=[],bounds=[],ymin=Infinity,ymax=-Infinity;
+  for(i=0;i<ch.out.length;i++){var pts=ch.out[i].pts||[],arr=[],step=Math.max(1,Math.floor(pts.length/200));
+    for(j=0;j<pts.length;j+=step)arr.push([(x0+pts[j][0])/0.3048,pts[j][1]/6894.757-o.patm]);
+    if(pts.length){var lp=pts[pts.length-1];arr.push([(x0+lp[0])/0.3048,lp[1]/6894.757-o.patm]);}
+    for(j=0;j<arr.length;j++){if(arr[j][1]<ymin)ymin=arr[j][1];if(arr[j][1]>ymax)ymax=arr[j][1];}
+    segsPts.push(arr);x0+=S[i].L;bounds.push(x0/0.3048);}
+  if(!isFinite(ymin))return '';
+  var xmax=x0/0.3048,pad=Math.max((ymax-ymin)*0.08,0.01);ymin-=pad;ymax+=pad;
+  var sx=function(x){return ml+x/xmax*pw;},sy=function(y){return mt+(ymax-y)/(ymax-ymin)*ph;};
+  var h='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:'+W+'px;font-family:Arial;font-size:10px">';
+  h+='<text x="'+(ml+pw/2)+'" y="14" text-anchor="middle" font-size="12" font-weight="700">Pressure profile, Q = '+fmt(lastR.q,2)+' MMSCFD</text>';
+  for(i=0;i<=5;i++){var yv=ymin+(ymax-ymin)*i/5,yy=sy(yv);h+='<line x1="'+ml+'" y1="'+yy+'" x2="'+(ml+pw)+'" y2="'+yy+'" stroke="#ccc" stroke-width="0.6"/><text x="'+(ml-6)+'" y="'+(yy+3)+'" text-anchor="end">'+fmt(yv,ymax-ymin<5?2:1)+'</text>';
+    var xv=xmax*i/5,xx=sx(xv);h+='<line x1="'+xx+'" y1="'+mt+'" x2="'+xx+'" y2="'+(mt+ph)+'" stroke="#ccc" stroke-width="0.6"/><text x="'+xx+'" y="'+(mt+ph+14)+'" text-anchor="middle">'+fmt(xv,0)+'</text>';}
+  h+='<rect x="'+ml+'" y="'+mt+'" width="'+pw+'" height="'+ph+'" fill="none" stroke="#333" stroke-width="0.8"/>';
+  for(i=0;i<bounds.length-1;i++){var bx=sx(bounds[i]);h+='<line x1="'+bx+'" y1="'+mt+'" x2="'+bx+'" y2="'+(mt+ph)+'" stroke="#888" stroke-dasharray="4 3" stroke-width="0.8"/>';}
+  var cols=['#2f6fb2','#c0392b','#2e8b57','#8e44ad','#d68910','#16a085'];
+  for(i=0;i<segsPts.length;i++){var d='';for(j=0;j<segsPts[i].length;j++)d+=(j?'L':'M')+sx(segsPts[i][j][0]).toFixed(1)+' '+sy(segsPts[i][j][1]).toFixed(1);
+    h+='<path d="'+d+'" fill="none" stroke="'+cols[i%cols.length]+'" stroke-width="1.8"/>';
+    var lx=sx((i?bounds[i-1]:0)+((bounds[i]-(i?bounds[i-1]:0))/2));h+='<text x="'+lx+'" y="'+(mt+ph-4)+'" text-anchor="middle" fill="'+cols[i%cols.length]+'">Seg '+(i+1)+'</text>';}
+  h+='<text x="'+(ml+pw/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11">Distance along assembly (ft)</text>';
+  h+='<text transform="translate(14,'+(mt+ph/2)+') rotate(-90)" text-anchor="middle" font-size="11">Pressure (psig)</text></svg>';
+  return h;
+}
+function makeReport(){
+  var el=$('report');
+  if(!lastR){el.innerHTML='<div class="rep"><div class="rtitle">Gas Line Hydraulics Report</div><p>No valid solution to report. Correct the inputs so a result is shown, then generate the report.</p></div>';return;}
+  var r=lastR,S=lastS,o=lastO,i,j,ch=chain(r.md,r.tb,S,true);
+  var d=new Date(),ds=('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+'-'+d.getFullYear();
+  var job=esc($('job').value||'—'),cs=esc($('case').value||'—'),prep=esc($('prep').value||'—'),chk=esc($('chk').value||'—');
+  var it=r.internal,ch1=r.choked;
+  var logo='<img src="'+(logoData||'logo.png')+'" alt="" style="height:34px;opacity:.35" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\'"><span style="display:none;font:700 20px Arial;color:#2f3a45;opacity:.35">VoltaGrid</span>';
+  var h='<div class="rep"><div class="rhead"><div><div class="rtitle">Gas Line Hydraulics Report</div><div class="rsub">VoltaGrid gas line hydraulics screening tool · isothermal real-gas integration</div></div><div class="rmeta">'+logo+'<div>Job No.: '+job+'</div><div>Prepared by: '+prep+'</div><div>Checked by: '+chk+'</div><div>'+ds+'</div></div></div>';
+  h+='<div class="rbar"><span>Case: '+cs+'</span><span>'+(o.mode==='dp'?'Solve for pressure drop':'Solve for flow rate')+'</span></div>';
+  h+='<div class="rbox"><div><div class="rh">GAS AND CONDITIONS</div>'
+    +(o.mode==='dp'?rl('Gas rate',fmt(o.q,3)+' MMSCFD'):rl('Target outlet pressure',fmt(o.p2,2)+' psig'))
+    +rl('Specific gravity',fmt(o.sg,3))+rl('Line temperature',fmt(o.t1,1)+' °F (constant)')+rl('Inlet pressure',fmt(o.p1,2)+' psig')
+    +rl('Atmospheric pressure',fmt(o.patm,2)+' psia')+rl('SCF base',fmt(o.pb,3)+' psia, 60 °F')+rl('Tpr / Ppr at inlet',fmt(r.tpr,3)+' / '+fmt(r.ppr,3))
+    +rl('Z inlet / outlet',fmt(r.z1,4)+' / '+(it?'—':fmt(r.z2,4)))+rl('Viscosity, inlet',fmt(r.mu,4)+' cP')+rl('Density, inlet',fmt(r.rho1,4)+' lb/ft³')
+    +'</div><div><div class="rh">RESULTS</div>'
+    +(o.mode==='dp'?rl('Pressure drop',it?'— internal limit':fmt(r.dp,3)+' psi')+rl('Outlet pressure',it?'— unresolved':fmt(r.p2g,2)+' psig'):rl('Flow rate',fmt(r.q,3)+' MMSCFD'+(ch1?' (limited)':''))+rl('Outlet pressure',it?'— unresolved':fmt(r.p2g,2)+' psig'))
+    +rl('Mass flow',fmt(r.mdot,0)+' lb/hr')+rl('Inlet actual flow',fmt(r.acfm,1)+' ACFM')+rl('Velocity in / out',fmt(r.v1,1)+' / '+(it?'—':fmt(r.v2,1))+' ft/s')
+    +rl('Outlet Mach (isothermal)',it?'—':fmt(r.ma,3))+rl('Max Mach (segment)',fmt(r.maxMa,3)+' (seg '+(r.maxSeg+1)+')')
+    +rl('Capacity (isothermal est.)',r.capOk?fmt(r.qmax,2)+' MMSCFD':'unavailable')+rl('Capacity limit',r.capOk?r.capLim+(isFinite(r.pcap)?' at '+fmt(r.pcap,1)+' psig':''):r.capMsg)
+    +rl('Total length incl. eq.',fmt(r.ltot,0)+' ft')+rl('Grid self-check',(r.gcOk?'pass: ':'FAIL: ')+r.gcTxt)+'</div></div>';
+  h+='<div class="rh">SEGMENT GEOMETRY</div><table class="rt"><tr><th>Seg</th><th>Material</th><th>Nominal / wall</th><th>ID (in)</th><th>L (ft)</th><th>+Eq. L (ft)</th><th>ε (in)</th><th>fT</th><th>K fittings</th><th>K added</th><th>Hose ×</th><th>Trans. K</th></tr>';
+  for(i=0;i<S.length;i++){var s=S[i],g=segs[i];h+='<tr><td>'+(i+1)+'</td><td>'+s.name+'</td><td>'+NPS[g.nps][6]+(MAT[g.mat].nom?'':' / '+WALL[g.sch])+'</td><td>'+fmt(s.id,3)+'</td><td>'+fmt(s.len,1)+'</td><td>'+fmt(s.lex,1)+'</td><td>'+g.rough+'</td><td>'+fmt(g.ft,3)+'</td><td>'+fmt(s.Kf,3)+'</td><td>'+fmt(s.Kx,3)+(s.Kx>0&&g.kxd>0?' @'+fmt(g.kxd,3)+' in':'')+'</td><td>'+(s.fm!==1?fmt(s.fm,2):'—')+'</td><td>'+(i>0?(g.trSel==='custom'?fmt(g.ktr,3):'auto'):'—')+'</td></tr>';}
+  h+='</table>';
+  h+='<div class="rh">SEGMENT HYDRAULICS</div><table class="rt"><tr><th>Seg</th><th>P in (psig)</th><th>P out (psig)</th><th>ΔP (psi)</th><th>v in (ft/s)</th><th>v out (ft/s)</th><th>Mach in</th><th>Mach out</th><th>API 14E v (ft/s)</th><th>Re in</th><th>f in</th></tr>';
+  for(i=0;i<S.length;i++){if(i>=r.nres){h+='<tr><td>'+(i+1)+'</td><td colspan="10" style="text-align:left">Not resolved, downstream of the limiting location</td></tr>';continue;}var q=r.segr[i];h+='<tr><td>'+(i+1)+(q.lim?' *':'')+'</td><td>'+fmt(q.pin,2)+'</td><td>'+fmt(q.pout,2)+'</td><td>'+fmt(q.dp,3)+'</td><td>'+fmt(q.vin,1)+'</td><td>'+fmt(q.vout,1)+'</td><td>'+fmt(q.main,3)+'</td><td>'+fmt(q.ma,3)+'</td><td>'+fmt(q.ve,1)+'</td><td>'+fmt(q.Re,0)+'</td><td>'+fmt(q.f,4)+'</td></tr>';}
+  h+='</table>'+(ch1&&r.limSt==='choked'?'<div class="rw">* choked at end of segment</div>':'');
+  var anyTr=false;for(i=0;i<r.trr.length;i++)if(r.trr[i])anyTr=true;
+  if(anyTr){h+='<div class="rh">DIAMETER TRANSITIONS</div><table class="rt"><tr><th>Into seg</th><th>Type</th><th>β</th><th>K (small-bore v)</th><th>Static ΔP (psi)</th></tr>';for(i=0;i<r.trr.length;i++){var t=r.trr[i];if(!t)continue;h+='<tr><td>'+(i+2)+'</td><td>'+(t.con?'Contraction':'Expansion')+'</td><td>'+fmt(t.beta,3)+'</td><td>'+fmt(t.K,3)+'</td><td>'+fmt(t.dp,3)+'</td></tr>';}h+='</table>';}
+  h+='<div class="rh">FITTINGS (Crane TP-410, K = (L/D)·fT)</div>';
+  var anyF=false;for(i=0;i<segs.length;i++){var lst=[];for(j=0;j<FIT.length;j++)if(segs[i].cnt[j]>0)lst.push(segs[i].cnt[j]+' × '+FIT[j][0]+' (L/D '+FIT[j][1]+')');if(segs[i].kx>0)lst.push('added K '+fmt(segs[i].kx,3)+(segs[i].kxd>0?' referenced to '+fmt(segs[i].kxd,3)+' in bore':''));if(lst.length){anyF=true;h+='<div class="rw">Segment '+(i+1)+': '+lst.join('; ')+' → K = '+fmt(S[i].K,3)+'</div>';}}
+  if(!anyF)h+='<div class="rw">None</div>';
+  h+='<div class="rh">PRESSURE PROFILE</div>'+profSvg(ch,S,o);
+  h+='<div class="rh">NOTES AND WARNINGS</div>';if(lastW.length){for(i=0;i<lastW.length;i++)h+='<div class="rw">• '+lastW[i]+'</div>';}else h+='<div class="rw">None</div>';
+  h+='<div class="rh">METHOD</div><div style="font-size:10.5px;color:#333">'+$('mnote').textContent+'</div>';
+  h+='<div class="rsig"><div>Prepared by: '+prep+'<span style="float:right">Signature / date: ________________</span></div><div>Checked by: '+chk+'<span style="float:right">Signature / date: ________________</span></div></div>';
+  h+='<div class="rfoot"><span>Generated '+ds+' · VoltaGrid gas line hydraulics screening tool</span><span>Screening calculation, not for construction without engineering review</span></div></div>';
+  el.innerHTML=h;el.scrollIntoView({behavior:'smooth'});
+}
+function inp(i,f,v,st){return '<input class="in" type="number" inputmode="decimal" step="'+st+'" value="'+v+'" oninput="sv('+i+',\''+f+'\',this.value)">';}
+function sel(i,f,opts,cur,dis,disIdx){var h='<select class="in"'+(dis?' disabled':'')+' onchange="sv('+i+',\''+f+'\',this.value)">';for(var j=0;j<opts.length;j++)h+='<option value="'+opts[j][0]+'"'+(String(opts[j][0])===String(cur)?' selected':'')+(disIdx&&disIdx.indexOf(j)>=0?' disabled':'')+'>'+opts[j][1]+'</option>';return h+'</select>';}
+function fld(l,c){return '<div><label class="lbl">'+l+'</label>'+c+'</div>';}
+function renderSegs(){
+  var h='',i,j;
+  for(i=0;i<segs.length;i++){var s=segs[i],m=MAT[s.mat],npo=[],wo=[];
+    for(j=0;j<NPS.length;j++)npo.push([j,NPS[j][6]]);for(j=0;j<WALL.length;j++)wo.push([j,WALL[j]]);
+    h+='<div class="seg"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:500">Segment '+(i+1)+'</span>'+(segs.length>1?'<button type="button" onclick="delSeg('+i+')" style="height:30px">Remove</button>':'')+'</div><div class="g2">'
+      +fld('Material',sel(i,'mat',MATO,s.mat,false))
+      +fld('Nominal size',sel(i,'nps',npo,s.nps,false))
+      +fld('Wall',sel(i,'sch',wo,s.sch,m.nom,s.mat==='pvc'?[2,3]:null))
+      +fld('Inside diameter (in)',inp(i,'id',s.id,0.001))
+      +fld('Length (ft)',inp(i,'len',s.len,1))
+      +fld('Roughness (in; hose = steel basis)',inp(i,'rough',s.rough,0.0001))
+      +fld('Extra equivalent length of this material (ft)',inp(i,'lex',s.lex,1))
+      +fld('Additional K, e.g. end connections',inp(i,'kx',s.kx,0.1))
+      +fld('K reference bore (in; 0 = this ID)',inp(i,'kxd',s.kxd,0.001))
+      +fld('fT for fittings (Crane)',inp(i,'ft',s.ft,0.001))
+      +fld('Hose friction multiplier (hose only)',sel(i,'hmSel',HMO,s.hmSel,s.mat!=='hose'))
+      +fld('Multiplier value',inp(i,'hm',s.hm,0.1))
+      +(i>0?fld('Inlet transition (if ID differs from previous)',sel(i,'trSel',TRO,s.trSel,false))+fld('Transition K (small-bore velocity basis)',inp(i,'ktr',s.ktr,0.01)):'')
+      +'</div></div>';}
+  $('segs').innerHTML=h;
+  var fo='';for(i=0;i<segs.length;i++)fo+='<option value="'+i+'"'+(i===selSeg?' selected':'')+'>Segment '+(i+1)+'</option>';$('fseg').innerHTML=fo;
+  renderFits();
+}
+function renderFits(){var s=segs[selSeg],h='';for(var i=0;i<FIT.length;i++){h+='<div class="stp"><span>'+FIT[i][0]+' <span style="color:var(--text-muted);font-size:12px">L/D '+FIT[i][1]+'</span></span><span style="display:flex;align-items:center;gap:10px"><button type="button" aria-label="Remove one" onclick="step('+i+',-1)">−</button><span style="min-width:18px;text-align:center;font-variant-numeric:tabular-nums">'+s.cnt[i]+'</span><button type="button" aria-label="Add one" onclick="step('+i+',1)">+</button></span></div>';}$('fits').innerHTML=h;calc();}
+function applySize(s){var r=NPS[s.nps],m=MAT[s.mat];s.id=m.nom?r[5]:r[s.sch];s.ft=r[4];}
+function sv(i,f,v){var s=segs[i];
+  if(f==='mat'){s.mat=v;s.rough=MAT[v].rough;if(v==='pvc'&&s.sch>1)s.sch=0;applySize(s);renderSegs();return;}
+  if(f==='nps'){s.nps=parseInt(v,10);applySize(s);renderSegs();return;}
+  if(f==='sch'){s.sch=parseInt(v,10);applySize(s);renderSegs();return;}
+  if(f==='hmSel'){s.hmSel=v;if(v!=='custom')s.hm=parseFloat(v);renderSegs();return;}
+  if(f==='trSel'){s.trSel=v;calc();return;}
+  if(f==='hm'){s.hm=parseFloat(v);if(s.hmSel!=='custom'){s.hmSel='custom';var sels=$('segs').querySelectorAll('select');for(var k=0;k<sels.length;k++){if(sels[k].getAttribute('onchange').indexOf('sv('+i+",'hmSel'")>=0)sels[k].value='custom';}}calc();return;}
+  s[f]=parseFloat(v);calc();}
+function step(i,d){var s=segs[selSeg];s.cnt[i]=Math.max(0,s.cnt[i]+d);renderFits();}
+function addSeg(){var s=newSeg();var p=segs[segs.length-1];s.mat=p.mat;s.nps=p.nps;s.sch=p.sch;s.rough=p.rough;s.ft=p.ft;s.hm=p.hm;s.hmSel=p.hmSel;applySize(s);segs.push(s);selSeg=segs.length-1;renderSegs();}
+function delSeg(i){if(segs.length<=1)return;segs.splice(i,1);if(selSeg>=segs.length)selSeg=segs.length-1;renderSegs();}
+function setMode(m){mode=m;$('mDp').className='mode'+(m==='dp'?' on':'');$('mQ').className='mode'+(m==='q'?' on':'');$('qRow').style.display=m==='dp'?'':'none';$('p2Row').style.display=m==='q'?'':'none';calc();}
+(function(){segs=[newSeg()];selSeg=0;renderSegs();setMode('dp');})();
 </script>
 </body>
 </html>
